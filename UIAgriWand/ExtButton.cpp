@@ -57,7 +57,8 @@ static String parseField(const String& data, const char* key) {
 static void UpdateRecordingIndicator() {
   if (!ui_PinpointLabel || !ui_OverviewPanel) return;
   if (is_recording) {
-    lv_label_set_text(ui_PinpointLabel, "REC\nPinpoints");
+    // Single line — clock timer akan update "REC MM:SS" setiap detik
+    lv_label_set_text(ui_PinpointLabel, "REC 00:00");
     // Border merah saat recording
     lv_obj_set_style_border_color(ui_OverviewPanel, lv_color_hex(0xDC2626), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_width(ui_OverviewPanel, 3, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -272,6 +273,12 @@ void ExtButton_Loop() {
     else if (raw == "MSG:READING") {
       ShowSavedPanel("Reading\nsensor...");
     }
+    // ---- MSG:BTN_HELD → Tombol ditahan, feedback visual ----
+    else if (raw == "MSG:BTN_HELD") {
+      if (is_recording) {
+        ShowSavedPanel("Hold to\nsave...");
+      }
+    }
     // ---- MSG:REC_STARTED → Recording berhasil dimulai ----
     else if (raw == "MSG:REC_STARTED") {
       is_recording = true;
@@ -302,12 +309,26 @@ void ExtButton_Loop() {
     }
     // ---- MSG:FILE_SAVED → File berhasil disimpan ---- 3
     else if (raw == "MSG:FILE_SAVED") {
+      // Hitung summary sebelum reset
+      unsigned long now_sec = (unsigned long)datetime.hour * 3600UL + datetime.minute * 60UL + datetime.second;
+      unsigned long elapsed = now_sec >= recording_start_sec
+          ? now_sec - recording_start_sec
+          : (86400UL - recording_start_sec) + now_sec;
+      int mins = elapsed / 60;
+      int secs = elapsed % 60;
+      int pts = total_pinpoints;
+
       is_recording = false;
       ExtButton_ResetPinpoints();
       if (ui_PinpointValue) lv_label_set_text(ui_PinpointValue, "0");
       UpdateRecordingIndicator();
-      ShowSavedPanel("Field data\nhas been saved!");
-      // Navigate langsung ke MainMenu (responsif, tanpa delay)
+
+      // Tampilkan summary: "3 pts saved · 05:23"
+      char summary[40];
+      snprintf(summary, sizeof(summary), "%d pts saved\n%02d:%02d elapsed", pts, mins, secs);
+      ShowSavedPanel(summary);
+
+      // Navigate ke MainMenu setelah pesan tampil
       _ui_screen_change(&ui_MainMenu, LV_SCR_LOAD_ANIM_FADE_ON, 100, 1500, &ui_MainMenu_screen_init);
     }
     // ---- MSG:EMPTY_SESSION → Stop tapi tidak ada data ---- 3'

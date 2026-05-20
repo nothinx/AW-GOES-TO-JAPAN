@@ -46,7 +46,6 @@ lv_obj_t* ui_PageIndicator2 = NULL;
 lv_obj_t* ui_SavedPanel = NULL;
 lv_obj_t* ui_SavedSuccessLabel = NULL;
 lv_obj_t* ui_GPSStatus = NULL;
-lv_obj_t* ui_ElapsedLabel = NULL;
 // event funtions
 void ui_event_TabViewOverview(lv_event_t* e) {
   lv_event_code_t event_code = lv_event_get_code(e);
@@ -536,19 +535,6 @@ void ui_Overview_screen_init(void) {
   lv_obj_set_style_text_opa(ui_GPSStatus, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
   lv_obj_set_style_text_font(ui_GPSStatus, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-  // Elapsed time label (visible saat recording)
-  ui_ElapsedLabel = lv_label_create(ui_OverviewPanel);
-  lv_obj_set_width(ui_ElapsedLabel, LV_SIZE_CONTENT);
-  lv_obj_set_height(ui_ElapsedLabel, LV_SIZE_CONTENT);
-  lv_obj_set_x(ui_ElapsedLabel, 0);
-  lv_obj_set_y(ui_ElapsedLabel, 82);
-  lv_obj_set_align(ui_ElapsedLabel, LV_ALIGN_CENTER);
-  lv_label_set_text(ui_ElapsedLabel, "");
-  lv_obj_add_flag(ui_ElapsedLabel, LV_OBJ_FLAG_HIDDEN);
-  lv_obj_set_style_text_color(ui_ElapsedLabel, lv_color_hex(0xFFCCCC), LV_PART_MAIN | LV_STATE_DEFAULT);
-  lv_obj_set_style_text_opa(ui_ElapsedLabel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-  lv_obj_set_style_text_font(ui_ElapsedLabel, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
-
   lv_obj_add_event_cb(ui_TabViewOverview, ui_event_TabViewOverview, LV_EVENT_ALL, NULL);
   lv_obj_add_event_cb(ui_SaveButton, ui_event_SaveButton, LV_EVENT_ALL, NULL);
 }
@@ -598,5 +584,4 @@ void ui_Overview_screen_destroy(void) {
   ui_SavedPanel = NULL;
   ui_SavedSuccessLabel = NULL;
   ui_GPSStatus = NULL;
-  ui_ElapsedLabel = NULL;
 }

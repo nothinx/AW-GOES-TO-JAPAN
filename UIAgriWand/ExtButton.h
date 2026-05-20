@@ -14,6 +14,6 @@ void ExtButton_Init();
 void ExtButton_Loop();
 void ExtButton_ResetPinpoints();
 void ExtButton_RequestTimeSync();
-bool ExtButton_IsTimeSynced();
+bool ExtButton_IsTimeSynced();  
 bool ExtButton_IsRecording();
 unsigned long ExtButton_GetRecStartSec();

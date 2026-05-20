@@ -46,7 +46,9 @@ last_press_time = 0           # Waktu terakhir tombol ditekan (untuk debounce)
 DEBOUNCE_MS = 300             # Debounce 300ms
 button_press_start = 0        # Timestamp awal tombol ditekan
 button_long_handled = False   # Flag: long press sudah ditrigger
+button_held_sent = False      # Flag: held feedback sudah dikirim
 LONG_PRESS_MS = 2000          # Threshold long press (2 detik)
+HOLD_FEEDBACK_MS = 800        # Kirim feedback visual saat 800ms
 
 # ==========================================
 # FUNGSI BACKGROUND: GPS ANTI-DELAY
@@ -284,10 +286,20 @@ try:
             if (now_ms - last_press_time) > DEBOUNCE_MS:
                 button_press_start = now_ms
                 button_long_handled = False
+                button_held_sent = False
 
-        # Tombol masih ditahan: cek long press
+        # Tombol masih ditahan: cek hold feedback + long press
         if current_read == GPIO.LOW and button_press_start > 0 and not button_long_handled:
-            if (now_ms - button_press_start) >= LONG_PRESS_MS:
+            hold_duration = now_ms - button_press_start
+            # Feedback visual di 800ms
+            if hold_duration >= HOLD_FEEDBACK_MS and not button_held_sent:
+                button_held_sent = True
+                if state == 1:
+                    try:
+                        ser_esp.write("MSG:BTN_HELD\n".encode('utf-8'))
+                    except Exception: pass
+            # Long press di 2000ms
+            if hold_duration >= LONG_PRESS_MS:
                 button_long_handled = True
                 last_press_time = now_ms
                 # === LONG PRESS: SAVE & STOP ===
