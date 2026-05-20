@@ -1,6 +1,7 @@
 #include "ExtButton.h"
 
 static bool time_synced = false;  // Flag: waktu sudah disinkronkan dari Raspi
+static bool is_recording = false; // Flag: sedang dalam mode recording
 
 HardwareSerial SensorSerial(1);
 
@@ -9,37 +10,80 @@ static lv_timer_t *saved_panel_timer = NULL;  // Timer auto-hide SavedPanel
 
 // Callback: auto-hide SavedPanel setelah timeout
 static void saved_panel_timer_cb(lv_timer_t *timer) {
-  lv_obj_add_flag(ui_SavedPanel, LV_OBJ_FLAG_HIDDEN);
+  if (ui_SavedPanel) lv_obj_add_flag(ui_SavedPanel, LV_OBJ_FLAG_HIDDEN);
   if (saved_panel_timer) {
     lv_timer_del(saved_panel_timer);
     saved_panel_timer = NULL;
   }
 }
 
-// Helper: tampilkan SavedPanel dengan pesan, auto-hide setelah 2.5 detik
+// Helper: tampilkan SavedPanel dengan pesan, auto-hide setelah 1.5 detik
 static void ShowSavedPanel(const char *msg) {
+  if (!ui_SavedPanel || !ui_SavedSuccessLabel) return;
   lv_label_set_text(ui_SavedSuccessLabel, msg);
   lv_obj_clear_flag(ui_SavedPanel, LV_OBJ_FLAG_HIDDEN);
   // Hapus timer lama jika masih aktif
   if (saved_panel_timer) {
     lv_timer_del(saved_panel_timer);
   }
-  saved_panel_timer = lv_timer_create(saved_panel_timer_cb, 2500, NULL);
+  saved_panel_timer = lv_timer_create(saved_panel_timer_cb, 1500, NULL);
   lv_timer_set_repeat_count(saved_panel_timer, 1);  // Hanya sekali
 }
 
 // Helper: ambil nilai dari format "KEY=VALUE" dalam string DATA
+// Fixed: cek boundary agar "N=" tidak match "RAIN=" dll
 static String parseField(const String& data, const char* key) {
-  String search = String(key) + "=";
-  int start = data.indexOf(search);
-  if (start == -1) return "0";
-  start += search.length();
+  // Cari "|KEY=" (field di tengah/akhir)
+  String pipeSearch = String("|") + key + "=";
+  int start = data.indexOf(pipeSearch);
+  if (start != -1) {
+    start += pipeSearch.length();
+  } else {
+    // Cari "KEY=" di awal string (field pertama)
+    String startSearch = String(key) + "=";
+    if (data.startsWith(startSearch)) {
+      start = startSearch.length();
+    } else {
+      return "0";
+    }
+  }
   int end = data.indexOf('|', start);
   if (end == -1) end = data.length();
   return data.substring(start, end);
 }
 
+// Helper: update indikator recording di Overview
+static void UpdateRecordingIndicator() {
+  if (!ui_PinpointLabel || !ui_OverviewPanel) return;
+  if (is_recording) {
+    lv_label_set_text(ui_PinpointLabel, "REC\nPinpoints");
+    // Border merah saat recording
+    lv_obj_set_style_border_color(ui_OverviewPanel, lv_color_hex(0xDC2626), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(ui_OverviewPanel, 3, LV_PART_MAIN | LV_STATE_DEFAULT);
+  } else {
+    lv_label_set_text(ui_PinpointLabel, "Pinpoint(s)\nCreated");
+    // Border kembali ke warna background (tidak terlihat)
+    lv_obj_set_style_border_color(ui_OverviewPanel, lv_color_hex(0x196B3B), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(ui_OverviewPanel, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+  }
+}
+
+// Helper: update GPS status di Overview
+static void UpdateGPSStatus(int gps_valid) {
+  if (!ui_GPSStatus) return;
+  if (gps_valid) {
+    lv_label_set_text(ui_GPSStatus, "GPS OK");
+    lv_obj_set_style_text_color(ui_GPSStatus, lv_color_hex(0x10B981), LV_PART_MAIN | LV_STATE_DEFAULT);
+  } else {
+    lv_label_set_text(ui_GPSStatus, "NO GPS");
+    lv_obj_set_style_text_color(ui_GPSStatus, lv_color_hex(0xDC2626), LV_PART_MAIN | LV_STATE_DEFAULT);
+  }
+}
+
 static void Update_UI(const String& raw) {
+  // Guard: jangan update jika widget belum ada / sudah di-destroy
+  if (!ui_TempValue || !ui_NBar || !ui_PBar || !ui_KBar) return;
+
   // Update label nilai sensor di Overview
   String data = raw.substring(5);  // Hapus "DATA:"
 
@@ -50,6 +94,10 @@ static void Update_UI(const String& raw) {
   int n = parseField(data, "N").toInt();
   int p = parseField(data, "P").toInt();
   int k = parseField(data, "K").toInt();
+  int gps = parseField(data, "GPS").toInt();
+
+  // Update GPS indicator
+  UpdateGPSStatus(gps);
 
   char buf[16];
 
@@ -150,7 +198,6 @@ static void Update_UI(const String& raw) {
     lv_obj_set_style_bg_color(ui_NBar, lv_color_hex(0xDC2626), LV_PART_INDICATOR | LV_STATE_DEFAULT);
   }
 
-
   snprintf(buf, sizeof(buf), "%d mg/kg", p);
   lv_label_set_text(ui_PValue, buf);
   lv_bar_set_value(ui_PBar, p, LV_ANIM_OFF);
@@ -191,6 +238,7 @@ void ExtButton_ResetPinpoints() {
 
 void ExtButton_Init() {
   SensorSerial.begin(9600, SERIAL_8N1, RX_PIN, TX_PIN);
+  SensorSerial.setTimeout(200);  // Cegah 1s freeze jika data corrupt
   Serial.println("ExtButton Serial ready");
 }
 
@@ -218,8 +266,10 @@ void ExtButton_Loop() {
     }
     // ---- MSG:REC_STARTED → Recording berhasil dimulai ----
     else if (raw == "MSG:REC_STARTED") {
+      is_recording = true;
       ExtButton_ResetPinpoints();
       lv_label_set_text(ui_PinpointValue, "0");
+      UpdateRecordingIndicator();
       ShowSavedPanel("Recording\nStarted!");
       Serial.println("[STATE] Recording started");
     }
@@ -230,12 +280,16 @@ void ExtButton_Loop() {
     }
     // ---- MSG:FILE_SAVED → File berhasil disimpan ---- 3
     else if (raw == "MSG:FILE_SAVED") {
+      is_recording = false;
       ExtButton_ResetPinpoints();
       lv_label_set_text(ui_PinpointValue, "0");
+      UpdateRecordingIndicator();
       ShowSavedPanel("Field data\nhas been saved!");
     }
     // ---- MSG:EMPTY_SESSION → Stop tapi tidak ada data ---- 3'
     else if (raw == "MSG:EMPTY_SESSION") {
+      is_recording = false;
+      UpdateRecordingIndicator();
       ShowSavedPanel("No data\nto save!");
     }
     // ---- MSG:NOT_REC → Stop/Save ditolak, belum recording ----

@@ -20,6 +20,7 @@ extern lv_obj_t * ui_DigitalClock;
 extern lv_obj_t * ui_DateLabel;
 extern lv_obj_t * ui_DevelopedbyLabel;
 extern lv_obj_t * ui_LogoR2C;
+extern lv_obj_t * ui_BatteryLabel;
 // CUSTOM VARIABLES
 
 #ifdef __cplusplus

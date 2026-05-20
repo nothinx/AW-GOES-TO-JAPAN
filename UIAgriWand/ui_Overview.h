@@ -55,6 +55,7 @@ extern lv_obj_t * ui_PageIndicator1;
 extern lv_obj_t * ui_PageIndicator2;
 extern lv_obj_t * ui_SavedPanel;
 extern lv_obj_t * ui_SavedSuccessLabel;
+extern lv_obj_t * ui_GPSStatus;
 // CUSTOM VARIABLES
 
 #ifdef __cplusplus

@@ -17,6 +17,7 @@ GPS_BAUD = 9600
 BUTTON_PIN = 26
 DATA_DIR = os.path.expanduser("~/agri_data")  # Folder penyimpanan data
 os.makedirs(DATA_DIR, exist_ok=True)
+TEMP_FILE = os.path.join(DATA_DIR, ".agri_wand_recording.tmp.json")
 
 # Shared Memory untuk GPS (Selalu diupdate dengan data terbaru)
 gps_lock = threading.Lock()  # Proteksi akses multi-thread
@@ -31,6 +32,8 @@ current_gps = {
 state = 0            # 0: Idle, 1: Recording
 session_data = []    # Tempat simpan data JSON
 button_state = False # Flag untuk trigger baca data
+last_time_sync = 0   # Timestamp terakhir sync waktu ke ESP32
+TIME_SYNC_INTERVAL = 3600  # Re-sync setiap 1 jam
 
 #===========================================
 # BUTTON GPIO SETUP (POLLING + DEBOUNCE)
@@ -56,7 +59,7 @@ def nmea_to_decimal(value, direction):
         if direction == 'S' or direction == 'W':
             decimal *= -1
         return round(decimal, 6)
-    except:
+    except Exception:
         return 0.0
 
 def gps_thread_loop():
@@ -154,23 +157,54 @@ except Exception as e:
 # ==========================================
 # HELPER: KIRIM WAKTU KE ESP32
 # ==========================================
-def send_time_to_esp():
-    """Kirim waktu Raspi ke ESP32 untuk sinkronisasi RTC."""
-    now = datetime.now()
-    # dotw: 0=Sunday, 1=Monday...6=Saturday (sesuai PCF85063)
-    # Python isoweekday(): 1=Monday...7=Sunday
-    py_dow = now.isoweekday()  # 1-7
-    dotw = 0 if py_dow == 7 else py_dow  # Convert: 7(Sun)->0, 1(Mon)->1...6(Sat)->6
-    time_str = f"TIME:{now.year},{now.month},{now.day},{dotw},{now.hour},{now.minute},{now.second}\n"
-    ser_esp.write(time_str.encode('utf-8'))
-    print(f" [SYNC] Waktu dikirim ke ESP32: {time_str.strip()}")
+def send_time_to_esp(force=False):
+    """Kirim waktu Raspi ke ESP32 untuk sinkronisasi RTC.
+    force=True: selalu kirim (boot, SYNC_TIME command)
+    force=False: skip jika sudah sync dalam TIME_SYNC_INTERVAL
+    """
+    global last_time_sync
+    now_ts = time.time()
+    # Skip jika sudah sync baru-baru ini (kecuali force)
+    if not force and last_time_sync > 0 and (now_ts - last_time_sync) < TIME_SYNC_INTERVAL:
+        return
+    try:
+        now = datetime.now()
+        # dotw: 0=Sunday, 1=Monday...6=Saturday (sesuai PCF85063)
+        # Python isoweekday(): 1=Monday...7=Sunday
+        py_dow = now.isoweekday()  # 1-7
+        dotw = 0 if py_dow == 7 else py_dow  # Convert: 7(Sun)->0, 1(Mon)->1...6(Sat)->6
+        time_str = f"TIME:{now.year},{now.month},{now.day},{dotw},{now.hour},{now.minute},{now.second}\n"
+        ser_esp.write(time_str.encode('utf-8'))
+        last_time_sync = now_ts
+        print(f" [SYNC] Waktu dikirim ke ESP32: {time_str.strip()}")
+    except Exception as e:
+        print(f" [SYNC ERR] Gagal kirim waktu: {e}")
+
+# ==========================================
+# HELPER: AUTO-SAVE KE TEMP FILE
+# ==========================================
+def autosave_session():
+    """Simpan session_data ke temp file untuk proteksi crash."""
+    try:
+        with open(TEMP_FILE, 'w') as f:
+            json.dump(session_data, f, indent=4)
+    except Exception as e:
+        print(f" [AUTOSAVE ERR] {e}")
 
 print("--- SISTEM SIAP MENERIMA PERINTAH DARI ESP32 ---")
 
 # Kirim waktu PROAKTIF ke ESP32 saat Raspi siap
-# (ESP32 mungkin sudah boot duluan dan menunggu)
-time.sleep(0.3)  # Beri waktu serial stabil
-send_time_to_esp()
+time.sleep(0.3)
+send_time_to_esp(force=True)
+
+# Recovery: cek jika ada temp file dari crash sebelumnya
+if os.path.exists(TEMP_FILE):
+    recovery_name = os.path.join(DATA_DIR, f"agri_wand_recovered_{int(time.time())}.json")
+    try:
+        os.rename(TEMP_FILE, recovery_name)
+        print(f" [RECOVERY] Data dari sesi crash sebelumnya disimpan: {recovery_name}")
+    except Exception as e:
+        print(f" [RECOVERY ERR] {e}")
 
 # ==========================================
 # LOOP UTAMA (MENUNGGU COMMAND ESP32)
@@ -188,13 +222,17 @@ try:
                     if state == 0:
                         state = 1
                         session_data = []
+                        # Bersihkan temp file lama jika ada
+                        if os.path.exists(TEMP_FILE):
+                            os.remove(TEMP_FILE)
                         ser_esp.write("MSG:REC_STARTED\n".encode('utf-8'))
                         print(" [STATE] Recording Started")
                     else:
                         # PROTEKSI UX: Cegah start ulang yang menghapus data
                         try:
                             ser_esp.write("MSG:ALREADY_REC\n".encode('utf-8'))
-                        except: pass
+                        except Exception:
+                            pass
                         print(" [UX] Command Start diabaikan (sudah recording).")
 
                 # COMMAND 2: MANUAL COLLECT DATA (Sebagai alternatif dari menekan tombol)
@@ -206,14 +244,21 @@ try:
                     if state == 1:
                         if len(session_data) > 0:
                             filename = os.path.join(DATA_DIR, f"agri_wand_{int(time.time())}.json")
-                            with open(filename, 'w') as f:
-                                json.dump(session_data, f, indent=4)
+                            # Gunakan temp file jika ada, atau tulis dari memory
+                            if os.path.exists(TEMP_FILE):
+                                os.rename(TEMP_FILE, filename)
+                            else:
+                                with open(filename, 'w') as f:
+                                    json.dump(session_data, f, indent=4)
                             
                             ser_esp.write(f"MSG:FILE_SAVED\n".encode('utf-8'))
                             print(f" [STATE] File tersimpan: {filename} ({len(session_data)} titik)")
                         else:
                             ser_esp.write("MSG:EMPTY_SESSION\n".encode('utf-8'))
                             print(" [STATE] Sesi dihentikan (Tidak ada data).")
+                            # Hapus temp file kosong jika ada
+                            if os.path.exists(TEMP_FILE):
+                                os.remove(TEMP_FILE)
                         
                         state = 0
                         session_data = []
@@ -222,7 +267,7 @@ try:
 
                 # COMMAND SYNC_TIME: ESP32 minta waktu dari Raspi
                 elif cmd == "SYNC_TIME":
-                    send_time_to_esp()
+                    send_time_to_esp(force=True)
 
             except Exception as e:
                 print(f"[LOOP ERROR] {e}")
@@ -241,7 +286,7 @@ try:
         if button_state:
             button_state = False  # Reset flag secepatnya agar tidak terjadi spam
 
-            # SYNC WAKTU: Kirim waktu terbaru setiap kali tombol ditekan
+            # SYNC WAKTU: Kirim waktu (skip jika sudah sync baru-baru ini)
             send_time_to_esp()
             
             # A. BACA SENSOR TANAH
@@ -253,10 +298,10 @@ try:
                 d_ph   = val[3] * 0.1
                 d_n, d_p, d_k = val[4], val[5], val[6]
                 soil_valid = True
-            except:
+            except Exception as e:
                 soil_valid = False
                 ser_esp.write("ERR:SOIL_TIMEOUT\n".encode('utf-8'))
-                print(" [ERR] Gagal baca sensor tanah!")
+                print(f" [ERR] Gagal baca sensor tanah: {e}")
 
             # B. AMBIL GPS TERBARU DARI MEMORI
             with gps_lock:
@@ -267,15 +312,16 @@ try:
                 # Tentukan prefix berdasarkan state:
                 #   state=1 → "DATA:"    (ESP akan update UI + increment pinpoint)
                 #   state=0 → "PREVIEW:" (ESP hanya update UI, tanpa increment)
+                gps_flag = 1 if d_gps['valid'] else 0
                 values_str = (f"T={d_temp:.1f}|H={d_hum:.1f}|PH={d_ph:.1f}|"
-                              f"EC={d_ec}|N={d_n}|P={d_p}|K={d_k}")
+                              f"EC={d_ec}|N={d_n}|P={d_p}|K={d_k}|GPS={gps_flag}")
 
                 if state == 1:
                     msg_lcd = f"DATA:{values_str}\n"
                     ser_esp.write(msg_lcd.encode('utf-8'))
                     print(f" [LCD] {msg_lcd.strip()} | GPS: {'OK' if d_gps['valid'] else 'WAIT'}")
 
-                    # D. SIMPAN KE JSON
+                    # D. SIMPAN KE JSON + AUTO-SAVE
                     point = {
                         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                         "soil": {
@@ -289,6 +335,7 @@ try:
                         }
                     }
                     session_data.append(point)
+                    autosave_session()
                     print(f" [SAVED] Titik ke-{len(session_data)} berhasil disimpan.")
                 else:
                     msg_lcd = f"PREVIEW:{values_str}\n"

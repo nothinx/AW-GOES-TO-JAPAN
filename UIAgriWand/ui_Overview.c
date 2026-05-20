@@ -45,6 +45,7 @@ lv_obj_t* ui_PageIndicator1 = NULL;
 lv_obj_t* ui_PageIndicator2 = NULL;
 lv_obj_t* ui_SavedPanel = NULL;
 lv_obj_t* ui_SavedSuccessLabel = NULL;
+lv_obj_t* ui_GPSStatus = NULL;
 // event funtions
 void ui_event_TabViewOverview(lv_event_t* e) {
   lv_event_code_t event_code = lv_event_get_code(e);
@@ -521,6 +522,18 @@ void ui_Overview_screen_init(void) {
   lv_obj_set_align(ui_SavedSuccessLabel, LV_ALIGN_CENTER);
   lv_label_set_text(ui_SavedSuccessLabel, "Field data\nhas been saved!");
 
+  // GPS Status indicator (di OverviewPanel, di bawah PinpointTime)
+  ui_GPSStatus = lv_label_create(ui_OverviewPanel);
+  lv_obj_set_width(ui_GPSStatus, LV_SIZE_CONTENT);
+  lv_obj_set_height(ui_GPSStatus, LV_SIZE_CONTENT);
+  lv_obj_set_x(ui_GPSStatus, 0);
+  lv_obj_set_y(ui_GPSStatus, 158);
+  lv_obj_set_align(ui_GPSStatus, LV_ALIGN_CENTER);
+  lv_label_set_text(ui_GPSStatus, "GPS --");
+  lv_obj_set_style_text_color(ui_GPSStatus, lv_color_hex(0x888888), LV_PART_MAIN | LV_STATE_DEFAULT);
+  lv_obj_set_style_text_opa(ui_GPSStatus, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+  lv_obj_set_style_text_font(ui_GPSStatus, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
+
   lv_obj_add_event_cb(ui_TabViewOverview, ui_event_TabViewOverview, LV_EVENT_ALL, NULL);
   lv_obj_add_event_cb(ui_SaveButton, ui_event_SaveButton, LV_EVENT_ALL, NULL);
 }
@@ -569,4 +582,5 @@ void ui_Overview_screen_destroy(void) {
   ui_PageIndicator2 = NULL;
   ui_SavedPanel = NULL;
   ui_SavedSuccessLabel = NULL;
+  ui_GPSStatus = NULL;
 }

@@ -11,6 +11,7 @@ lv_obj_t * ui_DigitalClock = NULL;
 lv_obj_t * ui_DateLabel = NULL;
 lv_obj_t * ui_DevelopedbyLabel = NULL;
 lv_obj_t * ui_LogoR2C = NULL;
+lv_obj_t * ui_BatteryLabel = NULL;
 // event funtions
 void ui_event_IdleScreen(lv_event_t * e)
 {
@@ -53,7 +54,7 @@ void ui_IdleScreen_screen_init(void)
     lv_obj_set_x(ui_DigitalClock, 0);
     lv_obj_set_y(ui_DigitalClock, -90);
     lv_obj_set_align(ui_DigitalClock, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_DigitalClock, "23:59");
+    lv_label_set_text(ui_DigitalClock, "--:--");
     lv_obj_set_style_text_color(ui_DigitalClock, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_DigitalClock, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_DigitalClock, &lv_font_montserrat_36, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -64,7 +65,7 @@ void ui_IdleScreen_screen_init(void)
     lv_obj_set_x(ui_DateLabel, 0);
     lv_obj_set_y(ui_DateLabel, -50);
     lv_obj_set_align(ui_DateLabel, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_DateLabel, "Monday, 31 Jan 2026");
+    lv_label_set_text(ui_DateLabel, "Syncing...");
     lv_obj_set_style_text_color(ui_DateLabel, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_DateLabel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_DateLabel, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -91,6 +92,18 @@ void ui_IdleScreen_screen_init(void)
     lv_obj_add_flag(ui_LogoR2C, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
     lv_obj_clear_flag(ui_LogoR2C, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
+    // Battery label (pojok bawah IdleScreen)
+    ui_BatteryLabel = lv_label_create(ui_IdleScreen);
+    lv_obj_set_width(ui_BatteryLabel, LV_SIZE_CONTENT);
+    lv_obj_set_height(ui_BatteryLabel, LV_SIZE_CONTENT);
+    lv_obj_set_x(ui_BatteryLabel, 0);
+    lv_obj_set_y(ui_BatteryLabel, 165);
+    lv_obj_set_align(ui_BatteryLabel, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_BatteryLabel, "");
+    lv_obj_set_style_text_color(ui_BatteryLabel, lv_color_hex(0x888888), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_BatteryLabel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_BatteryLabel, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
+
     lv_obj_add_event_cb(ui_IdleScreen, ui_event_IdleScreen, LV_EVENT_ALL, NULL);
 
 }
@@ -106,5 +119,6 @@ void ui_IdleScreen_screen_destroy(void)
     ui_DateLabel = NULL;
     ui_DevelopedbyLabel = NULL;
     ui_LogoR2C = NULL;
+    ui_BatteryLabel = NULL;
 
 }
