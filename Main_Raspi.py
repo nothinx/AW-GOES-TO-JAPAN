@@ -274,6 +274,58 @@ try:
                 elif cmd == "SYNC_TIME":
                     send_time_to_esp(force=True)
 
+                # COMMAND LIST_HISTORY: ESP32 minta daftar file recording
+                elif cmd == "LIST_HISTORY":
+                    try:
+                        files = sorted(
+                            [f for f in os.listdir(DATA_DIR) 
+                             if f.startswith("agri_wand_") and f.endswith(".json")
+                             and not f.startswith(".")],
+                            reverse=True  # Terbaru di atas
+                        )
+                        ser_esp.write(f"HIST_START:{len(files)}\n".encode('utf-8'))
+                        
+                        for fname in files[:20]:  # Max 20 item (hemat RAM ESP32)
+                            fpath = os.path.join(DATA_DIR, fname)
+                            try:
+                                with open(fpath, 'r') as f:
+                                    data = json.load(f)
+                                
+                                points = len(data) if isinstance(data, list) else 0
+                                
+                                # Hitung durasi dari timestamp pertama & terakhir
+                                dur_min = 0
+                                date_str = "Unknown"
+                                if points > 0:
+                                    try:
+                                        first_ts = datetime.strptime(data[0]["timestamp"], "%Y-%m-%d %H:%M:%S")
+                                        last_ts = datetime.strptime(data[-1]["timestamp"], "%Y-%m-%d %H:%M:%S")
+                                        dur_sec = (last_ts - first_ts).total_seconds()
+                                        dur_min = max(1, int(dur_sec / 60)) if dur_sec > 0 else 0
+                                        date_str = first_ts.strftime("%d %b %Y %H:%M")
+                                    except (KeyError, ValueError):
+                                        # Fallback: ambil dari nama file (unix timestamp)
+                                        try:
+                                            ts_str = fname.replace("agri_wand_", "").replace(".json", "")
+                                            file_ts = datetime.fromtimestamp(int(ts_str))
+                                            date_str = file_ts.strftime("%d %b %Y %H:%M")
+                                        except Exception:
+                                            date_str = fname
+                                
+                                item_msg = f"HIST_ITEM:{date_str}|{points}|{dur_min}\n"
+                                ser_esp.write(item_msg.encode('utf-8'))
+                                time.sleep(0.05)  # Jeda antar item agar ESP sempat proses
+                                
+                            except Exception as e:
+                                print(f" [HIST ERR] Gagal baca {fname}: {e}")
+                        
+                        ser_esp.write(f"HIST_END:{len(files)}\n".encode('utf-8'))
+                        print(f" [HIST] Kirim {min(len(files), 20)} dari {len(files)} file")
+                        
+                    except Exception as e:
+                        ser_esp.write("HIST_END:0\n".encode('utf-8'))
+                        print(f" [HIST ERR] {e}")
+
             except Exception as e:
                 print(f"[LOOP ERROR] {e}")
 

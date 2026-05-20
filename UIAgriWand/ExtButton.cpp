@@ -380,6 +380,94 @@ void ExtButton_Loop() {
         Serial.printf("[RTC ERR] Invalid TIME format, got %d fields\n", idx);
       }
     }
+    // ---- HIST_START: → Mulai menerima daftar history ----
+    else if (raw.startsWith("HIST_START:")) {
+      // Bersihkan list lama
+      if (ui_HistoryList) {
+        lv_obj_clean(ui_HistoryList);
+      }
+      // Tampilkan status loading
+      if (ui_HistoryStatus) {
+        ui_HistoryStatus = lv_label_create(ui_HistoryList);
+        lv_label_set_text(ui_HistoryStatus, "Loading...");
+        lv_obj_set_style_text_color(ui_HistoryStatus, lv_color_hex(0x888888), LV_PART_MAIN | LV_STATE_DEFAULT);
+        lv_obj_set_style_text_font(ui_HistoryStatus, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
+      }
+      Serial.println("[HIST] List cleared, receiving items...");
+    }
+    // ---- HIST_ITEM: → Satu item history ----
+    // Format: HIST_ITEM:date_str|points|duration_min
+    else if (raw.startsWith("HIST_ITEM:")) {
+      String payload = raw.substring(10);
+      // Parse: "20 May 2026 14:30|5|12"
+      int sep1 = payload.indexOf('|');
+      int sep2 = payload.lastIndexOf('|');
+      if (sep1 != -1 && sep2 != sep1) {
+        String dateStr = payload.substring(0, sep1);
+        int points = payload.substring(sep1 + 1, sep2).toInt();
+        int dur_min = payload.substring(sep2 + 1).toInt();
+
+        // Hapus status label jika masih ada
+        if (ui_HistoryStatus) {
+          lv_obj_del(ui_HistoryStatus);
+          ui_HistoryStatus = NULL;
+        }
+
+        // Buat card untuk item ini
+        if (ui_HistoryList) {
+          lv_obj_t *card = lv_obj_create(ui_HistoryList);
+          lv_obj_set_width(card, 290);
+          lv_obj_set_height(card, LV_SIZE_CONTENT);
+          lv_obj_set_style_radius(card, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
+          lv_obj_set_style_bg_color(card, lv_color_hex(0x1A3A2A), LV_PART_MAIN | LV_STATE_DEFAULT);
+          lv_obj_set_style_bg_opa(card, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+          lv_obj_set_style_border_color(card, lv_color_hex(0x2F7C4E), LV_PART_MAIN | LV_STATE_DEFAULT);
+          lv_obj_set_style_border_width(card, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+          lv_obj_set_style_pad_all(card, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
+          lv_obj_clear_flag(card, LV_OBJ_FLAG_SCROLLABLE);
+          lv_obj_set_flex_flow(card, LV_FLEX_FLOW_COLUMN);
+          lv_obj_set_style_pad_row(card, 4, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+          // Baris 1: Tanggal
+          lv_obj_t *dateLabel = lv_label_create(card);
+          lv_label_set_text(dateLabel, dateStr.c_str());
+          lv_obj_set_style_text_color(dateLabel, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+          lv_obj_set_style_text_font(dateLabel, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+          // Baris 2: Points + Duration
+          char infoStr[40];
+          snprintf(infoStr, sizeof(infoStr), "%d pts  |  %d min", points, dur_min);
+          lv_obj_t *infoLabel = lv_label_create(card);
+          lv_label_set_text(infoLabel, infoStr);
+          lv_obj_set_style_text_color(infoLabel, lv_color_hex(0x10B981), LV_PART_MAIN | LV_STATE_DEFAULT);
+          lv_obj_set_style_text_font(infoLabel, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
+        }
+        Serial.printf("[HIST] Item: %s, %d pts, %d min\n", dateStr.c_str(), points, dur_min);
+      }
+    }
+    // ---- HIST_END: → Selesai menerima history ----
+    else if (raw.startsWith("HIST_END:")) {
+      int total = raw.substring(9).toInt();
+      if (total == 0 && ui_HistoryList) {
+        // Hapus status loading jika masih ada
+        if (ui_HistoryStatus) {
+          lv_obj_del(ui_HistoryStatus);
+          ui_HistoryStatus = NULL;
+        }
+        // Tampilkan pesan kosong
+        ui_HistoryStatus = lv_label_create(ui_HistoryList);
+        lv_label_set_text(ui_HistoryStatus, "No recordings yet");
+        lv_obj_set_style_text_color(ui_HistoryStatus, lv_color_hex(0x888888), LV_PART_MAIN | LV_STATE_DEFAULT);
+        lv_obj_set_style_text_font(ui_HistoryStatus, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
+      } else {
+        // Hapus loading label
+        if (ui_HistoryStatus) {
+          lv_obj_del(ui_HistoryStatus);
+          ui_HistoryStatus = NULL;
+        }
+      }
+      Serial.printf("[HIST] Done, %d items total\n", total);
+    }
   }
 }
 

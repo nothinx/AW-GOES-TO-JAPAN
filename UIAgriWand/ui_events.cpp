@@ -45,11 +45,12 @@ void SaveDataset(lv_event_t * e) {
 }
 
 void History_LoadDateDropdown() {
-    lv_dropdown_set_options(ui_ChooseHistoryDrop, "Not supported");
-    // Nanti
+    // Request history list dari Raspi
+    SensorSerial.println("LIST_HISTORY");
+    Serial.println("[TX] LIST_HISTORY → Requesting file list");
+    // Respons HIST: ditangani di ExtButton_Loop()
 }
 
 void ViewDataset(lv_event_t * e) {
-    lv_label_set_text(ui_DatasetLabel, "History not\nsupported by Raspi");
-
+    // Tidak digunakan lagi (view only, tanpa detail)
 }
