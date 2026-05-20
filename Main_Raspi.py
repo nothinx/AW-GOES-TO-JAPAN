@@ -44,6 +44,9 @@ GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 last_button_read = GPIO.HIGH  # Status pembacaan sebelumnya
 last_press_time = 0           # Waktu terakhir tombol ditekan (untuk debounce)
 DEBOUNCE_MS = 300             # Debounce 300ms
+button_press_start = 0        # Timestamp awal tombol ditekan
+button_long_handled = False   # Flag: long press sudah ditrigger
+LONG_PRESS_MS = 2000          # Threshold long press (2 detik)
 
 # ==========================================
 # FUNGSI BACKGROUND: GPS ANTI-DELAY
@@ -272,23 +275,80 @@ try:
             except Exception as e:
                 print(f"[LOOP ERROR] {e}")
 
-        # 2. POLLING TOMBOL FISIK (DETEKSI FALLING EDGE + DEBOUNCE)
+        # 2. POLLING TOMBOL FISIK (LONG PRESS + SHORT PRESS)
         current_read = GPIO.input(BUTTON_PIN)
         now_ms = int(time.time() * 1000)
+
+        # Falling edge: tombol baru ditekan
         if last_button_read == GPIO.HIGH and current_read == GPIO.LOW:
-            # Falling edge terdeteksi, cek debounce
             if (now_ms - last_press_time) > DEBOUNCE_MS:
-                button_state = True
+                button_press_start = now_ms
+                button_long_handled = False
+
+        # Tombol masih ditahan: cek long press
+        if current_read == GPIO.LOW and button_press_start > 0 and not button_long_handled:
+            if (now_ms - button_press_start) >= LONG_PRESS_MS:
+                button_long_handled = True
                 last_press_time = now_ms
+                # === LONG PRESS: SAVE & STOP ===
+                if state == 1:
+                    print(" [LONG PRESS] Save & Stop Recording")
+                    if len(session_data) > 0:
+                        filename = os.path.join(DATA_DIR, f"agri_wand_{int(time.time())}.json")
+                        if os.path.exists(TEMP_FILE):
+                            os.rename(TEMP_FILE, filename)
+                        else:
+                            with open(filename, 'w') as f:
+                                json.dump(session_data, f, indent=4)
+                        try:
+                            ser_esp.write(f"MSG:FILE_SAVED\n".encode('utf-8'))
+                        except Exception: pass
+                        print(f" [STATE] File tersimpan: {filename} ({len(session_data)} titik)")
+                    else:
+                        try:
+                            ser_esp.write("MSG:EMPTY_SESSION\n".encode('utf-8'))
+                        except Exception: pass
+                        print(" [STATE] Sesi dihentikan (Tidak ada data).")
+                        if os.path.exists(TEMP_FILE):
+                            os.remove(TEMP_FILE)
+                    state = 0
+                    session_data = []
+                else:
+                    print(" [LONG PRESS] Diabaikan (tidak sedang recording).")
+
+        # Rising edge: tombol dilepas → short press
+        if last_button_read == GPIO.LOW and current_read == GPIO.HIGH:
+            if button_press_start > 0 and not button_long_handled:
+                if (now_ms - button_press_start) > 50:  # Min press time
+                    last_press_time = now_ms
+                    button_state = True
+            button_press_start = 0
+
         last_button_read = current_read
 
-        # 3. CEK TRIGGER TOMBOL FISIK ATAU COMMAND SERIAL
+        # 3. SHORT PRESS: AUTO-START + BACA SENSOR
         if button_state:
-            button_state = False  # Reset flag secepatnya agar tidak terjadi spam
+            button_state = False
 
-            # SYNC WAKTU: Kirim waktu (skip jika sudah sync baru-baru ini)
+            # AUTO-START: Jika belum recording, mulai otomatis
+            if state == 0:
+                state = 1
+                session_data = []
+                if os.path.exists(TEMP_FILE):
+                    os.remove(TEMP_FILE)
+                try:
+                    ser_esp.write("MSG:REC_STARTED\n".encode('utf-8'))
+                except Exception: pass
+                print(" [STATE] Auto-Start Recording via Button")
+
+            # SYNC WAKTU (skip jika sudah sync baru-baru ini)
             send_time_to_esp()
-            
+
+            # LOADING INDICATOR: Kirim ke ESP sebelum baca sensor
+            try:
+                ser_esp.write("MSG:READING\n".encode('utf-8'))
+            except Exception: pass
+
             # A. BACA SENSOR TANAH
             try:
                 val = sensor.read_registers(0, 7, functioncode=3)
@@ -300,47 +360,43 @@ try:
                 soil_valid = True
             except Exception as e:
                 soil_valid = False
-                ser_esp.write("ERR:SOIL_TIMEOUT\n".encode('utf-8'))
+                try:
+                    ser_esp.write("ERR:SOIL_TIMEOUT\n".encode('utf-8'))
+                except Exception:
+                    pass
                 print(f" [ERR] Gagal baca sensor tanah: {e}")
 
             # B. AMBIL GPS TERBARU DARI MEMORI
             with gps_lock:
                 d_gps = current_gps.copy()
 
-            # C. KIRIM FEEDBACK KE LAYAR ESP32 (Berlaku untuk Record & Live Preview)
+            # C. KIRIM FEEDBACK KE LAYAR ESP32
             if soil_valid:
-                # Tentukan prefix berdasarkan state:
-                #   state=1 → "DATA:"    (ESP akan update UI + increment pinpoint)
-                #   state=0 → "PREVIEW:" (ESP hanya update UI, tanpa increment)
                 gps_flag = 1 if d_gps['valid'] else 0
                 values_str = (f"T={d_temp:.1f}|H={d_hum:.1f}|PH={d_ph:.1f}|"
                               f"EC={d_ec}|N={d_n}|P={d_p}|K={d_k}|GPS={gps_flag}")
 
-                if state == 1:
-                    msg_lcd = f"DATA:{values_str}\n"
-                    ser_esp.write(msg_lcd.encode('utf-8'))
-                    print(f" [LCD] {msg_lcd.strip()} | GPS: {'OK' if d_gps['valid'] else 'WAIT'}")
+                # State pasti 1 karena auto-start di atas
+                msg_lcd = f"DATA:{values_str}\n"
+                ser_esp.write(msg_lcd.encode('utf-8'))
+                print(f" [LCD] {msg_lcd.strip()} | GPS: {'OK' if d_gps['valid'] else 'WAIT'}")
 
-                    # D. SIMPAN KE JSON + AUTO-SAVE
-                    point = {
-                        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                        "soil": {
-                            "temp": d_temp, "hum": d_hum, "ph": d_ph,
-                            "ec": d_ec, "n": d_n, "p": d_p, "k": d_k
-                        },
-                        "location": {
-                            "lat": d_gps["lat"],
-                            "lng": d_gps["lng"],
-                            "valid": d_gps["valid"]
-                        }
+                # D. SIMPAN KE JSON + AUTO-SAVE
+                point = {
+                    "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                    "soil": {
+                        "temp": d_temp, "hum": d_hum, "ph": d_ph,
+                        "ec": d_ec, "n": d_n, "p": d_p, "k": d_k
+                    },
+                    "location": {
+                        "lat": d_gps["lat"],
+                        "lng": d_gps["lng"],
+                        "valid": d_gps["valid"]
                     }
-                    session_data.append(point)
-                    autosave_session()
-                    print(f" [SAVED] Titik ke-{len(session_data)} berhasil disimpan.")
-                else:
-                    msg_lcd = f"PREVIEW:{values_str}\n"
-                    ser_esp.write(msg_lcd.encode('utf-8'))
-                    print(f" [PREVIEW] {msg_lcd.strip()} (data TIDAK disimpan)")
+                }
+                session_data.append(point)
+                autosave_session()
+                print(f" [SAVED] Titik ke-{len(session_data)} berhasil disimpan.")
 
 
         time.sleep(0.05)

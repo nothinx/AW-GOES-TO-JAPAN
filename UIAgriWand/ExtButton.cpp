@@ -2,6 +2,7 @@
 
 static bool time_synced = false;  // Flag: waktu sudah disinkronkan dari Raspi
 static bool is_recording = false; // Flag: sedang dalam mode recording
+static unsigned long recording_start_sec = 0; // Detik saat recording dimulai
 
 HardwareSerial SensorSerial(1);
 
@@ -83,6 +84,9 @@ static void UpdateGPSStatus(int gps_valid) {
 static void Update_UI(const String& raw) {
   // Guard: jangan update jika widget belum ada / sudah di-destroy
   if (!ui_TempValue || !ui_NBar || !ui_PBar || !ui_KBar) return;
+
+  // Sembunyikan SavedPanel (loading indicator) saat data masuk
+  if (ui_SavedPanel) lv_obj_add_flag(ui_SavedPanel, LV_OBJ_FLAG_HIDDEN);
 
   // Update label nilai sensor di Overview
   String data = raw.substring(5);  // Hapus "DATA:"
@@ -264,14 +268,32 @@ void ExtButton_Loop() {
       lv_label_set_text_fmt(ui_PinpointValue, "%d", total_pinpoints);
       Serial.println("[PREVIEW] UI updated (no pinpoint increment)");
     }
+    // ---- MSG:READING → Sedang baca sensor, tampilkan loading ----
+    else if (raw == "MSG:READING") {
+      ShowSavedPanel("Reading\nsensor...");
+    }
     // ---- MSG:REC_STARTED → Recording berhasil dimulai ----
     else if (raw == "MSG:REC_STARTED") {
       is_recording = true;
+      recording_start_sec = (unsigned long)datetime.hour * 3600UL + datetime.minute * 60UL + datetime.second;
       ExtButton_ResetPinpoints();
       lv_label_set_text(ui_PinpointValue, "0");
       UpdateRecordingIndicator();
+      // Auto-navigate ke Overview screen
+      if (ui_TabViewOverview) lv_tabview_set_act(ui_TabViewOverview, 0, LV_ANIM_OFF);
+      if (ui_PageIndicator1) {
+        lv_obj_set_style_bg_color(ui_PageIndicator1, lv_color_hex(0xFF6D00), LV_PART_MAIN | LV_STATE_DEFAULT);
+        lv_obj_set_style_border_color(ui_PageIndicator1, lv_color_hex(0xFF6D00), LV_PART_MAIN | LV_STATE_DEFAULT);
+      }
+      if (ui_PageIndicator2) {
+        lv_obj_set_style_bg_color(ui_PageIndicator2, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+        lv_obj_set_style_border_color(ui_PageIndicator2, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+      }
+      _ui_screen_change(&ui_Overview, LV_SCR_LOAD_ANIM_FADE_ON, 100, 0, &ui_Overview_screen_init);
+      if (ui_SavedPanel) _ui_flag_modify(ui_SavedPanel, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
+      if (ui_SaveButton) _ui_flag_modify(ui_SaveButton, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
       ShowSavedPanel("Recording\nStarted!");
-      Serial.println("[STATE] Recording started");
+      Serial.println("[STATE] Recording started (auto-navigate)");
     }
     // ---- MSG:ALREADY_REC → Start ditolak, sudah recording ---- 1' 
     else if (raw == "MSG:ALREADY_REC") {
@@ -282,15 +304,19 @@ void ExtButton_Loop() {
     else if (raw == "MSG:FILE_SAVED") {
       is_recording = false;
       ExtButton_ResetPinpoints();
-      lv_label_set_text(ui_PinpointValue, "0");
+      if (ui_PinpointValue) lv_label_set_text(ui_PinpointValue, "0");
       UpdateRecordingIndicator();
       ShowSavedPanel("Field data\nhas been saved!");
+      // Navigate langsung ke MainMenu (responsif, tanpa delay)
+      _ui_screen_change(&ui_MainMenu, LV_SCR_LOAD_ANIM_FADE_ON, 100, 1500, &ui_MainMenu_screen_init);
     }
     // ---- MSG:EMPTY_SESSION → Stop tapi tidak ada data ---- 3'
     else if (raw == "MSG:EMPTY_SESSION") {
       is_recording = false;
       UpdateRecordingIndicator();
       ShowSavedPanel("No data\nto save!");
+      // Navigate ke MainMenu
+      _ui_screen_change(&ui_MainMenu, LV_SCR_LOAD_ANIM_FADE_ON, 100, 1500, &ui_MainMenu_screen_init);
     }
     // ---- MSG:NOT_REC → Stop/Save ditolak, belum recording ----
     else if (raw == "MSG:NOT_REC") {
@@ -344,4 +370,12 @@ void ExtButton_RequestTimeSync() {
 
 bool ExtButton_IsTimeSynced() {
   return time_synced;
+}
+
+bool ExtButton_IsRecording() {
+  return is_recording;
+}
+
+unsigned long ExtButton_GetRecStartSec() {
+  return recording_start_sec;
 }

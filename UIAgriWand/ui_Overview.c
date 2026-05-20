@@ -46,6 +46,7 @@ lv_obj_t* ui_PageIndicator2 = NULL;
 lv_obj_t* ui_SavedPanel = NULL;
 lv_obj_t* ui_SavedSuccessLabel = NULL;
 lv_obj_t* ui_GPSStatus = NULL;
+lv_obj_t* ui_ElapsedLabel = NULL;
 // event funtions
 void ui_event_TabViewOverview(lv_event_t* e) {
   lv_event_code_t event_code = lv_event_get_code(e);
@@ -62,7 +63,7 @@ void ui_event_SaveButton(lv_event_t* e) {
     SaveDataset(e);
     // Respons dari Raspi (FILE_SAVED / EMPTY_SESSION) ditangani oleh ExtButton_Loop
     // Beri waktu 4 detik agar respons tampil sebelum pindah layar
-    _ui_screen_change(&ui_MainMenu, LV_SCR_LOAD_ANIM_FADE_ON, 100, 4000, &ui_MainMenu_screen_init);
+    _ui_screen_change(&ui_MainMenu, LV_SCR_LOAD_ANIM_FADE_ON, 100, 1500, &ui_MainMenu_screen_init);
     _ui_flag_modify(ui_SaveButton, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD); // hidden
   }
 }
@@ -443,6 +444,7 @@ void ui_Overview_screen_init(void) {
   lv_obj_set_y(ui_PinpointTime, 140);
   lv_obj_set_align(ui_PinpointTime, LV_ALIGN_CENTER);
   lv_label_set_text(ui_PinpointTime, "--:--:--");
+  lv_obj_set_x(ui_PinpointTime, -40);
   lv_obj_set_style_text_color(ui_PinpointTime, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
   lv_obj_set_style_text_opa(ui_PinpointTime, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
   lv_obj_set_style_text_font(ui_PinpointTime, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -522,17 +524,30 @@ void ui_Overview_screen_init(void) {
   lv_obj_set_align(ui_SavedSuccessLabel, LV_ALIGN_CENTER);
   lv_label_set_text(ui_SavedSuccessLabel, "Field data\nhas been saved!");
 
-  // GPS Status indicator (di OverviewPanel, di bawah PinpointTime)
+  // GPS Status indicator (same line as PinpointTime)
   ui_GPSStatus = lv_label_create(ui_OverviewPanel);
   lv_obj_set_width(ui_GPSStatus, LV_SIZE_CONTENT);
   lv_obj_set_height(ui_GPSStatus, LV_SIZE_CONTENT);
-  lv_obj_set_x(ui_GPSStatus, 0);
-  lv_obj_set_y(ui_GPSStatus, 158);
+  lv_obj_set_x(ui_GPSStatus, 50);
+  lv_obj_set_y(ui_GPSStatus, 140);
   lv_obj_set_align(ui_GPSStatus, LV_ALIGN_CENTER);
   lv_label_set_text(ui_GPSStatus, "GPS --");
   lv_obj_set_style_text_color(ui_GPSStatus, lv_color_hex(0x888888), LV_PART_MAIN | LV_STATE_DEFAULT);
   lv_obj_set_style_text_opa(ui_GPSStatus, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
   lv_obj_set_style_text_font(ui_GPSStatus, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+  // Elapsed time label (visible saat recording)
+  ui_ElapsedLabel = lv_label_create(ui_OverviewPanel);
+  lv_obj_set_width(ui_ElapsedLabel, LV_SIZE_CONTENT);
+  lv_obj_set_height(ui_ElapsedLabel, LV_SIZE_CONTENT);
+  lv_obj_set_x(ui_ElapsedLabel, 0);
+  lv_obj_set_y(ui_ElapsedLabel, 82);
+  lv_obj_set_align(ui_ElapsedLabel, LV_ALIGN_CENTER);
+  lv_label_set_text(ui_ElapsedLabel, "");
+  lv_obj_add_flag(ui_ElapsedLabel, LV_OBJ_FLAG_HIDDEN);
+  lv_obj_set_style_text_color(ui_ElapsedLabel, lv_color_hex(0xFFCCCC), LV_PART_MAIN | LV_STATE_DEFAULT);
+  lv_obj_set_style_text_opa(ui_ElapsedLabel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+  lv_obj_set_style_text_font(ui_ElapsedLabel, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
 
   lv_obj_add_event_cb(ui_TabViewOverview, ui_event_TabViewOverview, LV_EVENT_ALL, NULL);
   lv_obj_add_event_cb(ui_SaveButton, ui_event_SaveButton, LV_EVENT_ALL, NULL);
@@ -583,4 +598,5 @@ void ui_Overview_screen_destroy(void) {
   ui_SavedPanel = NULL;
   ui_SavedSuccessLabel = NULL;
   ui_GPSStatus = NULL;
+  ui_ElapsedLabel = NULL;
 }

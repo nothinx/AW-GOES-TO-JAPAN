@@ -66,6 +66,23 @@ static void clock_timer_cb(lv_timer_t * timer) {
             }
         }
     }
+
+    // Update elapsed time jika sedang recording
+    if (ui_ElapsedLabel) {
+        if (ExtButton_IsRecording()) {
+            unsigned long now_sec = (unsigned long)datetime.hour * 3600UL + datetime.minute * 60UL + datetime.second;
+            unsigned long start_sec = ExtButton_GetRecStartSec();
+            unsigned long elapsed = now_sec >= start_sec ? now_sec - start_sec : (86400UL - start_sec) + now_sec;
+            int mins = elapsed / 60;
+            int secs = elapsed % 60;
+            char ebuf[20];
+            snprintf(ebuf, sizeof(ebuf), "Elapsed %02d:%02d", mins, secs);
+            lv_label_set_text(ui_ElapsedLabel, ebuf);
+            lv_obj_clear_flag(ui_ElapsedLabel, LV_OBJ_FLAG_HIDDEN);
+        } else {
+            lv_obj_add_flag(ui_ElapsedLabel, LV_OBJ_FLAG_HIDDEN);
+        }
+    }
 }
 
 void ui_clock_Init() {
