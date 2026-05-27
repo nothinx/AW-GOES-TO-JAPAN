@@ -1,0 +1,753 @@
+{
+  "Plot_A_Subur": {
+    "scenario_label": "Lahan Subur Seimbang",
+    "soil_profile": {
+      "N": 210.67,
+      "P": 29.84,
+      "K": 174.56,
+      "pH": 6.43,
+      "EC": 951.05,
+      "hum": 58.78,
+      "temp": 28.21
+    },
+    "rankings": [
+      {
+        "crop": "Padi",
+        "total": 1.0,
+        "factors": {
+          "pH": [
+            1.0,
+            0.25
+          ],
+          "N": [
+            1.0,
+            0.15
+          ],
+          "P": [
+            1.0,
+            0.15
+          ],
+          "K": [
+            1.0,
+            0.15
+          ],
+          "hum": [
+            1.0,
+            0.1
+          ],
+          "temp": [
+            1.0,
+            0.1
+          ],
+          "EC": [
+            1.0,
+            0.1
+          ]
+        },
+        "notes": [
+          "pH lahan (6.43) berada dalam rentang optimal (5.5–7.0)."
+        ]
+      },
+      {
+        "crop": "Jagung",
+        "total": 0.9883,
+        "factors": {
+          "pH": [
+            1.0,
+            0.25
+          ],
+          "N": [
+            0.958,
+            0.144
+          ],
+          "P": [
+            0.995,
+            0.149
+          ],
+          "K": [
+            0.97,
+            0.145
+          ],
+          "hum": [
+            1.0,
+            0.1
+          ],
+          "temp": [
+            1.0,
+            0.1
+          ],
+          "EC": [
+            1.0,
+            0.1
+          ]
+        },
+        "notes": [
+          "pH lahan (6.43) berada dalam rentang optimal (5.6–7.2).",
+          "N defisit 9 mg/kg (aktual 211, target 220) — perlu dosis koreksi.",
+          "P defisit 0 mg/kg (aktual 30, target 30) — perlu dosis koreksi.",
+          "K defisit 5 mg/kg (aktual 175, target 180) — perlu dosis koreksi."
+        ]
+      },
+      {
+        "crop": "Singkong",
+        "total": 0.969,
+        "factors": {
+          "pH": [
+            1.0,
+            0.25
+          ],
+          "N": [
+            1.0,
+            0.15
+          ],
+          "P": [
+            1.0,
+            0.15
+          ],
+          "K": [
+            0.793,
+            0.119
+          ],
+          "hum": [
+            1.0,
+            0.1
+          ],
+          "temp": [
+            1.0,
+            0.1
+          ],
+          "EC": [
+            1.0,
+            0.1
+          ]
+        },
+        "notes": [
+          "pH lahan (6.43) berada dalam rentang optimal (4.8–7.0).",
+          "N berlebih (211 vs target 100 mg/kg) — hemat pupuk N pada penanaman.",
+          "K defisit 45 mg/kg (aktual 175, target 220) — perlu dosis koreksi."
+        ]
+      },
+      {
+        "crop": "Kedelai",
+        "total": 0.9588,
+        "factors": {
+          "pH": [
+            1.0,
+            0.25
+          ],
+          "N": [
+            1.0,
+            0.15
+          ],
+          "P": [
+            0.852,
+            0.128
+          ],
+          "K": [
+            0.873,
+            0.131
+          ],
+          "hum": [
+            1.0,
+            0.1
+          ],
+          "temp": [
+            1.0,
+            0.1
+          ],
+          "EC": [
+            1.0,
+            0.1
+          ]
+        },
+        "notes": [
+          "pH lahan (6.43) berada dalam rentang optimal (6.0–7.0).",
+          "N berlebih (211 vs target 90 mg/kg) — hemat pupuk N pada penanaman.",
+          "P defisit 5 mg/kg (aktual 30, target 35) — perlu dosis koreksi.",
+          "K defisit 25 mg/kg (aktual 175, target 200) — perlu dosis koreksi."
+        ]
+      },
+      {
+        "crop": "Bawang Merah",
+        "total": 0.9304,
+        "factors": {
+          "pH": [
+            1.0,
+            0.25
+          ],
+          "N": [
+            1.0,
+            0.15
+          ],
+          "P": [
+            0.663,
+            0.099
+          ],
+          "K": [
+            0.873,
+            0.131
+          ],
+          "hum": [
+            1.0,
+            0.1
+          ],
+          "temp": [
+            1.0,
+            0.1
+          ],
+          "EC": [
+            1.0,
+            0.1
+          ]
+        },
+        "notes": [
+          "pH lahan (6.43) berada dalam rentang optimal (5.6–6.8).",
+          "P defisit 15 mg/kg (aktual 30, target 45) — perlu dosis koreksi.",
+          "K defisit 25 mg/kg (aktual 175, target 200) — perlu dosis koreksi."
+        ]
+      },
+      {
+        "crop": "Cabai",
+        "total": 0.9166,
+        "factors": {
+          "pH": [
+            1.0,
+            0.25
+          ],
+          "N": [
+            1.0,
+            0.15
+          ],
+          "P": [
+            0.746,
+            0.112
+          ],
+          "K": [
+            0.698,
+            0.105
+          ],
+          "hum": [
+            1.0,
+            0.1
+          ],
+          "temp": [
+            1.0,
+            0.1
+          ],
+          "EC": [
+            1.0,
+            0.1
+          ]
+        },
+        "notes": [
+          "pH lahan (6.43) berada dalam rentang optimal (5.5–6.8).",
+          "P defisit 10 mg/kg (aktual 30, target 40) — perlu dosis koreksi.",
+          "K defisit 75 mg/kg (aktual 175, target 250) — perlu dosis koreksi."
+        ]
+      }
+    ]
+  },
+  "Plot_B_Defisit_N": {
+    "scenario_label": "Lahan Defisit Nitrogen",
+    "soil_profile": {
+      "N": 90.95,
+      "P": 27.83,
+      "K": 155.93,
+      "pH": 6.14,
+      "EC": 827.36,
+      "hum": 58.55,
+      "temp": 29.25
+    },
+    "rankings": [
+      {
+        "crop": "Singkong",
+        "total": 0.9427,
+        "factors": {
+          "pH": [
+            1.0,
+            0.25
+          ],
+          "N": [
+            0.91,
+            0.136
+          ],
+          "P": [
+            1.0,
+            0.15
+          ],
+          "K": [
+            0.709,
+            0.106
+          ],
+          "hum": [
+            1.0,
+            0.1
+          ],
+          "temp": [
+            1.0,
+            0.1
+          ],
+          "EC": [
+            1.0,
+            0.1
+          ]
+        },
+        "notes": [
+          "pH lahan (6.14) berada dalam rentang optimal (4.8–7.0).",
+          "N defisit 9 mg/kg (aktual 91, target 100) — perlu dosis koreksi.",
+          "K defisit 64 mg/kg (aktual 156, target 220) — perlu dosis koreksi."
+        ]
+      },
+      {
+        "crop": "Kedelai",
+        "total": 0.9362,
+        "factors": {
+          "pH": [
+            1.0,
+            0.25
+          ],
+          "N": [
+            1.0,
+            0.15
+          ],
+          "P": [
+            0.795,
+            0.119
+          ],
+          "K": [
+            0.78,
+            0.117
+          ],
+          "hum": [
+            1.0,
+            0.1
+          ],
+          "temp": [
+            1.0,
+            0.1
+          ],
+          "EC": [
+            1.0,
+            0.1
+          ]
+        },
+        "notes": [
+          "pH lahan (6.14) berada dalam rentang optimal (6.0–7.0).",
+          "P defisit 7 mg/kg (aktual 28, target 35) — perlu dosis koreksi.",
+          "K defisit 44 mg/kg (aktual 156, target 200) — perlu dosis koreksi."
+        ]
+      },
+      {
+        "crop": "Padi",
+        "total": 0.9258,
+        "factors": {
+          "pH": [
+            1.0,
+            0.25
+          ],
+          "N": [
+            0.505,
+            0.076
+          ],
+          "P": [
+            1.0,
+            0.15
+          ],
+          "K": [
+            1.0,
+            0.15
+          ],
+          "hum": [
+            1.0,
+            0.1
+          ],
+          "temp": [
+            1.0,
+            0.1
+          ],
+          "EC": [
+            1.0,
+            0.1
+          ]
+        },
+        "notes": [
+          "pH lahan (6.14) berada dalam rentang optimal (5.5–7.0).",
+          "N defisit 89 mg/kg (aktual 91, target 180) — perlu dosis koreksi."
+        ]
+      },
+      {
+        "crop": "Jagung",
+        "total": 0.8811,
+        "factors": {
+          "pH": [
+            1.0,
+            0.25
+          ],
+          "N": [
+            0.413,
+            0.062
+          ],
+          "P": [
+            0.928,
+            0.139
+          ],
+          "K": [
+            0.866,
+            0.13
+          ],
+          "hum": [
+            1.0,
+            0.1
+          ],
+          "temp": [
+            1.0,
+            0.1
+          ],
+          "EC": [
+            1.0,
+            0.1
+          ]
+        },
+        "notes": [
+          "pH lahan (6.14) berada dalam rentang optimal (5.6–7.2).",
+          "N defisit 129 mg/kg (aktual 91, target 220) — perlu dosis koreksi.",
+          "P defisit 2 mg/kg (aktual 28, target 30) — perlu dosis koreksi.",
+          "K defisit 24 mg/kg (aktual 156, target 180) — perlu dosis koreksi."
+        ]
+      },
+      {
+        "crop": "Bawang Merah",
+        "total": 0.845,
+        "factors": {
+          "pH": [
+            1.0,
+            0.25
+          ],
+          "N": [
+            0.568,
+            0.085
+          ],
+          "P": [
+            0.618,
+            0.093
+          ],
+          "K": [
+            0.78,
+            0.117
+          ],
+          "hum": [
+            1.0,
+            0.1
+          ],
+          "temp": [
+            1.0,
+            0.1
+          ],
+          "EC": [
+            1.0,
+            0.1
+          ]
+        },
+        "notes": [
+          "pH lahan (6.14) berada dalam rentang optimal (5.6–6.8).",
+          "N defisit 69 mg/kg (aktual 91, target 160) — perlu dosis koreksi.",
+          "P defisit 17 mg/kg (aktual 28, target 45) — perlu dosis koreksi.",
+          "K defisit 44 mg/kg (aktual 156, target 200) — perlu dosis koreksi."
+        ]
+      },
+      {
+        "crop": "Cabai",
+        "total": 0.8161,
+        "factors": {
+          "pH": [
+            1.0,
+            0.25
+          ],
+          "N": [
+            0.455,
+            0.068
+          ],
+          "P": [
+            0.696,
+            0.104
+          ],
+          "K": [
+            0.624,
+            0.094
+          ],
+          "hum": [
+            1.0,
+            0.1
+          ],
+          "temp": [
+            1.0,
+            0.1
+          ],
+          "EC": [
+            1.0,
+            0.1
+          ]
+        },
+        "notes": [
+          "pH lahan (6.14) berada dalam rentang optimal (5.5–6.8).",
+          "N defisit 109 mg/kg (aktual 91, target 200) — perlu dosis koreksi.",
+          "P defisit 12 mg/kg (aktual 28, target 40) — perlu dosis koreksi.",
+          "K defisit 94 mg/kg (aktual 156, target 250) — perlu dosis koreksi."
+        ]
+      }
+    ]
+  },
+  "Plot_C_Asam": {
+    "scenario_label": "Lahan Asam (pH rendah)",
+    "soil_profile": {
+      "N": 136.32,
+      "P": 14.43,
+      "K": 143.82,
+      "pH": 4.96,
+      "EC": 1166.09,
+      "hum": 61.66,
+      "temp": 28.11
+    },
+    "rankings": [
+      {
+        "crop": "Singkong",
+        "total": 0.9063,
+        "factors": {
+          "pH": [
+            1.0,
+            0.25
+          ],
+          "N": [
+            1.0,
+            0.15
+          ],
+          "P": [
+            0.721,
+            0.108
+          ],
+          "K": [
+            0.654,
+            0.098
+          ],
+          "hum": [
+            1.0,
+            0.1
+          ],
+          "temp": [
+            1.0,
+            0.1
+          ],
+          "EC": [
+            1.0,
+            0.1
+          ]
+        },
+        "notes": [
+          "pH lahan (4.96) berada dalam rentang optimal (4.8–7.0).",
+          "P defisit 6 mg/kg (aktual 14, target 20) — perlu dosis koreksi.",
+          "K defisit 76 mg/kg (aktual 144, target 220) — perlu dosis koreksi."
+        ]
+      },
+      {
+        "crop": "Padi",
+        "total": 0.7029,
+        "factors": {
+          "pH": [
+            0.236,
+            0.059
+          ],
+          "N": [
+            0.757,
+            0.114
+          ],
+          "P": [
+            0.577,
+            0.087
+          ],
+          "K": [
+            0.959,
+            0.144
+          ],
+          "hum": [
+            1.0,
+            0.1
+          ],
+          "temp": [
+            1.0,
+            0.1
+          ],
+          "EC": [
+            1.0,
+            0.1
+          ]
+        },
+        "notes": [
+          "pH (4.96) tidak cocok untuk Padi; kemungkinan gagal tumbuh tanpa amelioran.",
+          "N defisit 44 mg/kg (aktual 136, target 180) — perlu dosis koreksi.",
+          "P defisit 11 mg/kg (aktual 14, target 25) — perlu dosis koreksi.",
+          "K defisit 6 mg/kg (aktual 144, target 150) — perlu dosis koreksi."
+        ]
+      },
+      {
+        "crop": "Kedelai",
+        "total": 0.6197,
+        "factors": {
+          "pH": [
+            0.0,
+            0.0
+          ],
+          "N": [
+            1.0,
+            0.15
+          ],
+          "P": [
+            0.412,
+            0.062
+          ],
+          "K": [
+            0.719,
+            0.108
+          ],
+          "hum": [
+            1.0,
+            0.1
+          ],
+          "temp": [
+            1.0,
+            0.1
+          ],
+          "EC": [
+            1.0,
+            0.1
+          ]
+        },
+        "notes": [
+          "pH (4.96) tidak cocok untuk Kedelai; kemungkinan gagal tumbuh tanpa amelioran.",
+          "N berlebih (136 vs target 90 mg/kg) — hemat pupuk N pada penanaman.",
+          "P defisit 21 mg/kg (aktual 14, target 35) — perlu dosis koreksi.",
+          "K defisit 56 mg/kg (aktual 144, target 200) — perlu dosis koreksi."
+        ]
+      },
+      {
+        "crop": "Jagung",
+        "total": 0.5849,
+        "factors": {
+          "pH": [
+            0.0,
+            0.0
+          ],
+          "N": [
+            0.62,
+            0.093
+          ],
+          "P": [
+            0.481,
+            0.072
+          ],
+          "K": [
+            0.799,
+            0.12
+          ],
+          "hum": [
+            1.0,
+            0.1
+          ],
+          "temp": [
+            1.0,
+            0.1
+          ],
+          "EC": [
+            1.0,
+            0.1
+          ]
+        },
+        "notes": [
+          "pH (4.96) tidak cocok untuk Jagung; kemungkinan gagal tumbuh tanpa amelioran.",
+          "N defisit 84 mg/kg (aktual 136, target 220) — perlu dosis koreksi.",
+          "P defisit 16 mg/kg (aktual 14, target 30) — perlu dosis koreksi.",
+          "K defisit 36 mg/kg (aktual 144, target 180) — perlu dosis koreksi."
+        ]
+      },
+      {
+        "crop": "Bawang Merah",
+        "total": 0.5838,
+        "factors": {
+          "pH": [
+            0.0,
+            0.0
+          ],
+          "N": [
+            0.852,
+            0.128
+          ],
+          "P": [
+            0.321,
+            0.048
+          ],
+          "K": [
+            0.719,
+            0.108
+          ],
+          "hum": [
+            1.0,
+            0.1
+          ],
+          "temp": [
+            1.0,
+            0.1
+          ],
+          "EC": [
+            1.0,
+            0.1
+          ]
+        },
+        "notes": [
+          "pH (4.96) tidak cocok untuk Bawang Merah; kemungkinan gagal tumbuh tanpa amelioran.",
+          "N defisit 24 mg/kg (aktual 136, target 160) — perlu dosis koreksi.",
+          "P defisit 31 mg/kg (aktual 14, target 45) — perlu dosis koreksi.",
+          "K defisit 56 mg/kg (aktual 144, target 200) — perlu dosis koreksi."
+        ]
+      },
+      {
+        "crop": "Cabai",
+        "total": 0.5426,
+        "factors": {
+          "pH": [
+            0.0,
+            0.0
+          ],
+          "N": [
+            0.682,
+            0.102
+          ],
+          "P": [
+            0.361,
+            0.054
+          ],
+          "K": [
+            0.575,
+            0.086
+          ],
+          "hum": [
+            1.0,
+            0.1
+          ],
+          "temp": [
+            1.0,
+            0.1
+          ],
+          "EC": [
+            1.0,
+            0.1
+          ]
+        },
+        "notes": [
+          "pH (4.96) tidak cocok untuk Cabai; kemungkinan gagal tumbuh tanpa amelioran.",
+          "N defisit 64 mg/kg (aktual 136, target 200) — perlu dosis koreksi.",
+          "P defisit 26 mg/kg (aktual 14, target 40) — perlu dosis koreksi.",
+          "K defisit 106 mg/kg (aktual 144, target 250) — perlu dosis koreksi."
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,19 @@
+plot_id,rank,crop,total_score,pH_score,N_score,P_score,K_score,hum_score,temp_score,EC_score
+Plot_A_Subur,1,Padi,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+Plot_A_Subur,2,Jagung,0.9883,1.0,0.958,0.995,0.97,1.0,1.0,1.0
+Plot_A_Subur,3,Singkong,0.969,1.0,1.0,1.0,0.793,1.0,1.0,1.0
+Plot_A_Subur,4,Kedelai,0.9588,1.0,1.0,0.852,0.873,1.0,1.0,1.0
+Plot_A_Subur,5,Bawang Merah,0.9304,1.0,1.0,0.663,0.873,1.0,1.0,1.0
+Plot_A_Subur,6,Cabai,0.9166,1.0,1.0,0.746,0.698,1.0,1.0,1.0
+Plot_B_Defisit_N,1,Singkong,0.9427,1.0,0.91,1.0,0.709,1.0,1.0,1.0
+Plot_B_Defisit_N,2,Kedelai,0.9362,1.0,1.0,0.795,0.78,1.0,1.0,1.0
+Plot_B_Defisit_N,3,Padi,0.9258,1.0,0.505,1.0,1.0,1.0,1.0,1.0
+Plot_B_Defisit_N,4,Jagung,0.8811,1.0,0.413,0.928,0.866,1.0,1.0,1.0
+Plot_B_Defisit_N,5,Bawang Merah,0.845,1.0,0.568,0.618,0.78,1.0,1.0,1.0
+Plot_B_Defisit_N,6,Cabai,0.8161,1.0,0.455,0.696,0.624,1.0,1.0,1.0
+Plot_C_Asam,1,Singkong,0.9063,1.0,1.0,0.721,0.654,1.0,1.0,1.0
+Plot_C_Asam,2,Padi,0.7029,0.236,0.757,0.577,0.959,1.0,1.0,1.0
+Plot_C_Asam,3,Kedelai,0.6197,0.0,1.0,0.412,0.719,1.0,1.0,1.0
+Plot_C_Asam,4,Jagung,0.5849,0.0,0.62,0.481,0.799,1.0,1.0,1.0
+Plot_C_Asam,5,Bawang Merah,0.5838,0.0,0.852,0.321,0.719,1.0,1.0,1.0
+Plot_C_Asam,6,Cabai,0.5426,0.0,0.682,0.361,0.575,1.0,1.0,1.0

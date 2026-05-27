@@ -1,0 +1,4 @@
+plot_id,target_crop,total_area_ha,n_zones,Urea_kg_VRA,SP36_kg_VRA,KCl_kg_VRA,Total_kg_VRA,Cost_IDR_VRA,Urea_kg_Conv,SP36_kg_Conv,KCl_kg_Conv,Total_kg_Conv,Cost_IDR_Conv,Savings_kg,Savings_pct_kg,Cost_Savings_IDR,Cost_Savings_pct
+Plot_A_Subur,Padi,3.0,16,0.0,0.0,0.0,0.0,0.0,750.0,300.0,225.0,1275.0,3532500.0,1275.0,100.0,3532500.0,100.0
+Plot_B_Defisit_N,Singkong,3.0,16,157.3,0.0,832.9,990.3,4518703.0,600.0,300.0,600.0,1500.0,5070000.0,509.7,34.0,551297.0,10.9
+Plot_C_Asam,Singkong,3.0,16,0.0,120.7,990.3,1111.0,5241226.0,600.0,300.0,600.0,1500.0,5070000.0,389.0,25.9,-171226.0,-3.4
