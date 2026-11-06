@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Booth Terra-Agri</title>
-<meta name="description" content="Visualisasi 3D booth Terra-Agri 3x3 m: tata letak, sudut pandang, dan daftar dekorasi untuk expo.">
+<meta name="description" content="Visualisasi 3D booth Terra-Agri UKSW 3x3 m: tata letak, sudut pandang, dan daftar barang bawaan untuk expo.">
 <style>
 /* design · alat kerja tim (visualisasi booth) · dial E1/R1/M1 · tanda tangan: kanvas 3D · font sistem */
 :root{--bg:#f4f1ea;--panel:#fffdf8;--ink:#1f2a1f;--muted:#5a6656;--line:#d8d2c4;--accent:#2f6b3a;--accent-ink:#fff}
@@ -39,23 +39,23 @@ li span{color:var(--muted);font-size:14px}
   </div>
   <aside>
     <h1>Booth Terra-Agri</h1>
-    <p>Booth 300 × 300 cm. Layout sederhana: MMT di belakang, poster di dinding samping, meja maju ke depan untuk demo, monitor di sudut. Semua barang dibawa dari Salatiga, jadi dipilih yang bisa digulung atau dilipat.</p>
+    <p>Booth 300 × 300 cm, Universitas Kristen Satya Wacana. Meja bertaplak di tengah dengan monitor di atasnya, MMT polos berisi data asli di belakang, tanaman dan jaring hijau sebagai bingkai. Semua barang ringan dan bisa dibawa dari Salatiga.</p>
     <h2>Daftar barang</h2>
     <ol>
-      <li><b>MMT 240 × 160 cm + klip</b><span>Dinding belakang. Digulung (jangan dilipat) dalam tabung gambar bersama poster.</span></li>
-      <li><b>2 poster A2</b><span>Dinding kiri: masalah dan solusi. Dinding kanan: hasil. Masuk tabung yang sama. Template INNOPA ada di backup HP: <code>Download/Poster Product.pdf</code>.</span></li>
-      <li><b>2 poster B5 di stand akrilik</b><span>Di meja, spesifikasi singkat + QR. Masuk map.</span></li>
-      <li><b>Monitor</b><span>Sudut kanan belakang, miring ke lorong, video pitch/demo diputar loop tanpa suara. Bila monitor terlalu repot dibawa, laptop di meja sudah cukup.</span></li>
-      <li><b>Taplak meja menjuntai ke lantai</b><span>Hijau tua, logo di depan. Dilipat di koper; menutupi tas dan kardus di bawah meja.</span></li>
-      <li><b>Tanaman palsu</b><span>2 tanaman sedang di sudut + 1 pot kecil di meja. Pilih yang plastik ringan.</span></li>
-      <li><b>Bendera meja ID + JP</b><span>Kecil, cukup di meja.</span></li>
-      <li><b>Daun rambat (ivy) plastik</b><span>Opsional, ringan: dijepit di tepi atas dinding untuk membingkai MMT.</span></li>
-      <li><b>Nampan kecil berisi tanah + Agri Wand</b><span>Opsional, paling menarik pengunjung: tanah pot dibawa dalam plastik ziplock, alat ditancapkan saat demo.</span></li>
+      <li><b>MMT 240 × 160 cm + klip</b><span>Latar krem polos, satu kalimat besar, 5 langkah kerja, peta zona dan grafik dari data paper, plus slot foto alat asli. Tanpa ilustrasi drone/ikon awan. Digulung dalam tabung gambar.</span></li>
+      <li><b>Monitor di meja</b><span>Monitor 22 sampai 24 inci dengan kaki bawaan, di belakang meja menghadap lorong. Putar video demo loop tanpa suara. Laptop juga bisa.</span></li>
+      <li><b>Taplak meja polos</b><span>Hijau tua, menjuntai sampai lantai, tanpa tulisan besar. Dilipat di koper; menutupi tas di bawah meja.</span></li>
+      <li><b>Nampan tanah + Agri Wand</b><span>Di sisi kanan meja: pengunjung menancapkan alat, angkanya muncul di monitor. Tanah dibawa dalam plastik ziplock.</span></li>
+      <li><b>Papan kapur kecil + easel lipat</b><span>Sudut depan kanan: "Coba demo sensor kami / Try our sensor demo". Ditulis di lokasi.</span></li>
+      <li><b>Jaring hijau + daun rambat</b><span>Sudut depan kiri, dijepit di rangka atas dan dibiarkan menjuntai. Jaring paranet/kain jaring dan ivy plastik, keduanya ringan dan bisa dilipat.</span></li>
+      <li><b>Tanaman palsu dalam pot plastik</b><span>4 sampai 5 pot kecil berjajar di depan meja + 2 rumpun di sudut depan. Pot plastik, bukan tanah liat, supaya ringan.</span></li>
+      <li><b>2 poster A2</b><span>Dinding kiri: masalah dan solusi. Dinding kanan: hasil. Gaya sama dengan MMT. Template INNOPA ada di backup HP: <code>Download/Poster Product.pdf</code>.</span></li>
+      <li><b>Poster B5 di stand akrilik + bendera meja ID/JP</b><span>Di sisi kiri meja.</span></li>
     </ol>
     <h2>Bawaan pendukung</h2>
-    <p>Klip binder/penjepit, cable ties, double tape, gunting, terminal kabel. Cek dulu aturan panitia soal menempel di panel booth.</p>
+    <p>Klip binder, cable ties, double tape, gunting, terminal kabel, kapur. Cek dulu aturan panitia soal menempel di panel booth.</p>
     <h2>Yang perlu diisi tim</h2>
-    <p>Logo resmi, nama universitas di papan nama, isi QR, dan desain final MMT/poster. Teks di model ini diambil dari concept note dan pitch script; ganti bila sudah ada versi final.</p>
+    <p>Foto asli Agri Wand dan Terra Core di lahan (slot abu-abu di MMT), logo resmi, isi QR, dan desain final. Teks di model ini diambil dari concept note dan pitch script.</p>
   </aside>
 </div>
 <script type="module">
@@ -71,23 +71,18 @@ renderer.outputColorSpace = THREE.SRGBColorSpace;
 stage.prepend(renderer.domElement);
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xdcdcd6);
-scene.fog = new THREE.Fog(0xdcdcd6, 9, 20);
+scene.background = new THREE.Color(0xdedad2);
+scene.fog = new THREE.Fog(0xdedad2, 9, 20);
 const camera = new THREE.PerspectiveCamera(50, 1, 0.05, 60);
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.maxPolarAngle = Math.PI * 0.495;
 
-scene.add(new THREE.HemisphereLight(0xffffff, 0x8a8a80, 1.6));
-const sun = new THREE.DirectionalLight(0xffffff, 1.6);
-sun.position.set(3, 6, 5);
-sun.castShadow = true;
-sun.shadow.mapSize.set(2048, 2048);
+scene.add(new THREE.HemisphereLight(0xffffff, 0x8a8a80, 1.5));
+const sun = new THREE.DirectionalLight(0xffffff, 1.4);
+sun.position.set(3, 6, 5); sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048);
 Object.assign(sun.shadow.camera, {left:-4, right:4, top:4, bottom:-4});
 scene.add(sun);
-
-const dasar = new THREE.Group(), plus = dasar;
-scene.add(dasar);
 
 // --- helpers ---
 const mat = (c, o={}) => new THREE.MeshStandardMaterial({color:c, roughness:.8, ...o});
@@ -95,113 +90,133 @@ function box(w,h,d,m,x,y,z,parent=scene){
   const me = new THREE.Mesh(new THREE.BoxGeometry(w,h,d), typeof m==='number'? mat(m): m);
   me.position.set(x,y,z); me.castShadow = me.receiveShadow = true; parent.add(me); return me;
 }
-function cyl(rt,rb,h,c,x,y,z,parent){ const me=new THREE.Mesh(new THREE.CylinderGeometry(rt,rb,h,20),mat(c)); me.position.set(x,y,z); me.castShadow=true; parent.add(me); return me; }
+function cyl(rt,rb,h,c,x,y,z,parent=scene){ const me=new THREE.Mesh(new THREE.CylinderGeometry(rt,rb,h,20),typeof c==='number'?mat(c):c); me.position.set(x,y,z); me.castShadow=true; parent.add(me); return me; }
 function canvasTex(w,h,draw){
   const c=document.createElement('canvas'); c.width=w; c.height=h; const g=c.getContext('2d');
   const t=new THREE.CanvasTexture(c); t.colorSpace=THREE.SRGBColorSpace; t.anisotropy=8;
   t.redraw=()=>{draw(g,w,h); t.needsUpdate=true}; t.redraw(); return t;
 }
-function plane(w,h,tex,x,y,z,ry,parent){
+function plane(w,h,tex,x,y,z,ry,parent=scene){
   const me=new THREE.Mesh(new THREE.PlaneGeometry(w,h), new THREE.MeshStandardMaterial({map:tex,roughness:.9}));
   me.position.set(x,y,z); me.rotation.y=ry; me.receiveShadow=true; parent.add(me); return me;
 }
-const imgs={}; const textures=[];
+const imgs={}, textures=[];
 ['fig2','fig3','fig4','fig5'].forEach(k=>{const i=new Image(); i.onload=()=>textures.forEach(t=>t.redraw()); i.src=`img/${k}.jpg`; imgs[k]=i;});
-const fitImg=(g,img,x,y,w,h)=>{ if(!img.complete||!img.naturalWidth){g.fillStyle='#e6e1d6';g.fillRect(x,y,w,h);return;}
-  const s=Math.min(w/img.naturalWidth,h/img.naturalHeight), iw=img.naturalWidth*s, ih=img.naturalHeight*s;
-  g.fillStyle='#fff';g.fillRect(x,y,w,h); g.drawImage(img,x+(w-iw)/2,y+(h-ih)/2,iw,ih); };
-const GREEN='#1f5130', LEAF='#5aa33a', SOIL='#6b4a2b', CREAM='#f7f3e8';
+const fitImg=(g,img,x,y,w,h)=>{ g.fillStyle='#fff'; g.fillRect(x,y,w,h); if(!img.complete||!img.naturalWidth) return;
+  const s=Math.min(w/img.naturalWidth,h/img.naturalHeight), iw=img.naturalWidth*s, ih=img.naturalHeight*s; g.drawImage(img,x+(w-iw)/2,y+(h-ih)/2,iw,ih); };
+const GREEN='#24502f', PAPER='#f3efe6', INK='#1d231d', SUB='#55604f';
 function text(g,s,x,y,size,color,weight=700,align='left'){g.font=`${weight} ${size}px system-ui,Segoe UI,sans-serif`;g.fillStyle=color;g.textAlign=align;g.fillText(s,x,y);}
-function wrap(g,s,x,y,maxW,size,color,lh=1.35){g.font=`400 ${size}px system-ui,Segoe UI,sans-serif`;g.fillStyle=color;g.textAlign='left';
+function wrap(g,s,x,y,maxW,size,color,weight=400,lh=1.3){g.font=`${weight} ${size}px system-ui,Segoe UI,sans-serif`;g.fillStyle=color;g.textAlign='left';
   let line='';for(const w of s.split(' ')){const t=line?line+' '+w:w; if(g.measureText(t).width>maxW){g.fillText(line,x,y);y+=size*lh;line=w}else line=t} g.fillText(line,x,y); return y+size*lh;}
+function photoSlot(g,x,y,w,h,label){g.fillStyle='#d9d4c8';g.fillRect(x,y,w,h);g.strokeStyle='#a8a294';g.lineWidth=3;g.setLineDash([14,10]);g.strokeRect(x+6,y+6,w-12,h-12);g.setLineDash([]);text(g,label,x+w/2,y+h/2+12,Math.min(40,w/16),'#6c675c',600,'center');}
 
-// --- booth shell (disediakan panitia) ---
-box(3.4,.02,3.4,0x3a3a3a,0,-.01,0).receiveShadow=true;               // karpet booth
-const floorOut=new THREE.Mesh(new THREE.PlaneGeometry(40,40),mat(0xbdbab2)); floorOut.rotation.x=-Math.PI/2; floorOut.position.y=-.021; floorOut.receiveShadow=true; scene.add(floorOut);
-const wallM=mat(0xf5f5f2), alu=mat(0xb8bcc0,{metalness:.6,roughness:.4});
+// --- booth (disediakan panitia) ---
+box(3.4,.02,3.4,0x2e2e2e,0,-.01,0);
+const floorOut=new THREE.Mesh(new THREE.PlaneGeometry(40,40),mat(0xd8d2c6)); floorOut.rotation.x=-Math.PI/2; floorOut.position.y=-.021; floorOut.receiveShadow=true; scene.add(floorOut);
+const wallM=mat(0xf6f6f3), alu=mat(0xb8bcc0,{metalness:.6,roughness:.4});
 box(3,2.1,.04,wallM,0,1.05,-1.5); box(.04,2.1,3,wallM,-1.5,1.05,0); box(.04,2.1,3,wallM,1.5,1.05,0);
 for(const x of [-1.5,-.5,.5,1.5]) box(.05,2.1,.06,alu,x,1.05,-1.5);
 for(const z of [-1.5,-.5,.5,1.5]){ box(.06,2.1,.05,alu,-1.5,1.05,z); box(.06,2.1,.05,alu,1.5,1.05,z); }
 box(.06,2.4,.06,alu,-1.5,1.2,1.5); box(.06,2.4,.06,alu,1.5,1.2,1.5);
 box(.04,.3,3,alu,-1.5,2.25,0); box(.04,.3,3,alu,1.5,2.25,0);
-const fasciaTex=canvasTex(2048,212,(g,w,h)=>{g.fillStyle='#fff';g.fillRect(0,0,w,h);text(g,'NAMA UNIVERSITAS',w/2,140,110,'#222',800,'center');});
+const fasciaTex=canvasTex(2400,248,(g,w,h)=>{g.fillStyle='#fff';g.fillRect(0,0,w,h);text(g,'UNIVERSITAS KRISTEN SATYA WACANA',w/2,160,104,'#1d1d1d',800,'center');});
 box(2.94,.3,.04,new THREE.MeshStandardMaterial({map:fasciaTex}),0,2.25,1.5);
 
-// --- 4. MMT dinding belakang ---
+// --- MMT: latar kertas, data asli, slot foto ---
 const mmtTex=canvasTex(2400,1600,(g,w,h)=>{
-  const grd=g.createLinearGradient(0,0,0,h); grd.addColorStop(0,'#173d24'); grd.addColorStop(1,'#2d6a3c'); g.fillStyle=grd; g.fillRect(0,0,w,h);
-  text(g,'TERRA-AGRI',120,230,190,CREAM,900);
-  text(g,'Smart Farming Decision Support System',124,320,64,'#cfe6c4',500);
-  wrap(g,'Bridging the gap between traditional wisdom and data-driven agriculture.',124,420,1000,52,'#e8f1e0');
-  g.fillStyle='rgba(255,255,255,.08)'; g.fillRect(120,560,500,420); g.fillRect(660,560,500,420);
-  text(g,'AGRI WAND',150,640,56,'#ffd36b',800); wrap(g,'Handheld soil probe with nutrient sensors and GPS. Works offline in the field.',150,710,440,38,CREAM);
-  text(g,'TERRA CORE',690,640,56,'#ffd36b',800); wrap(g,'Solar-powered, off-grid edge station. Maps the field and recommends crops and fertilizer.',690,710,440,38,CREAM);
-  const steps=['Insert the wand','Read soil','Sync offline','On-site AI analysis','Act on the map'];
-  steps.forEach((s,i)=>{const x=120+i*210; g.fillStyle='#ffd36b'; g.beginPath(); g.arc(x+40,1100,40,0,7); g.fill(); text(g,String(i+1),x+40,1118,48,'#173d24',900,'center'); wrap(g,s,x,1190,190,32,CREAM);});
-  text(g,'SDG 2 · SDG 12 · SDG 15',120,1480,52,'#cfe6c4',700);
-  fitImg(g,imgs.fig3,1260,140,1020,640); text(g,'Variable-rate zone map',1260,830,40,'#cfe6c4',600);
-  fitImg(g,imgs.fig4,1260,900,1020,520);
+  g.fillStyle=PAPER; g.fillRect(0,0,w,h);
+  text(g,'Terra-Agri',110,170,64,GREEN,800);
+  wrap(g,'Fertilize by evidence, not by instinct.',110,330,1150,118,INK,800,1.05);
+  wrap(g,'A handheld soil probe and an off-grid station that map nutrients across a field and recommend crops and fertilizer doses, without internet.',110,640,1050,44,SUB);
+  g.fillStyle=INK; g.fillRect(110,860,1100,3);
+  ['Insert the probe','Read the soil','Sync offline','Analyse on site','Act on the map'].forEach((s,i)=>{const x=110+i*225;
+    text(g,'0'+(i+1),x,960,64,GREEN,800); wrap(g,s,x,1020,200,36,INK,600);});
+  g.fillStyle=INK; g.fillRect(110,1140,1100,3);
+  photoSlot(g,110,1190,530,300,'[FOTO ASLI: Agri Wand]'); photoSlot(g,680,1190,530,300,'[FOTO ASLI: Terra Core]');
+  fitImg(g,imgs.fig3,1320,110,980,640); text(g,'Nitrogen zone map, simulated plot',1320,800,34,SUB,500);
+  fitImg(g,imgs.fig4,1320,860,980,560); text(g,'Variable-rate vs uniform fertilizing',1320,1470,34,SUB,500);
+  text(g,'SDG 2  ·  SDG 12  ·  SDG 15',110,1560,36,SUB,600);
 });
 textures.push(mmtTex);
-plane(2.4,1.6,mmtTex,0,1.22,-1.47,0,dasar);
-for(const x of [-1.2,-.4,.4,1.2]) for(const y of [.42,2.02]) box(.05,.03,.03,0x222222,x,y,-1.46,dasar); // penjepit
+plane(2.4,1.6,mmtTex,0,1.22,-1.47,0);
+for(const x of [-1.2,-.4,.4,1.2]) for(const y of [.42,2.02]) box(.05,.03,.03,0x222222,x,y,-1.46);
 
-// --- 6. poster A2 dinding samping ---
-function poster(title,body,img){ return canvasTex(840,1188,(g,w,h)=>{g.fillStyle=CREAM;g.fillRect(0,0,w,h);g.fillStyle=GREEN;g.fillRect(0,0,w,200);
-  text(g,'TERRA-AGRI',50,90,56,CREAM,900); text(g,title,50,160,44,'#cfe6c4',600); let y=wrap(g,body,50,280,740,34,'#2b2b2b'); fitImg(g,imgs[img],40,y+20,760,h-y-80);});}
-const pA=poster('The problem','Farmers fertilize by instinct across the whole field. Cloud IoT fails where signal is weak, and black-box AI is not trusted.','fig2');
-const pB=poster('The solution','A portable probe plus a local edge station: crop and soil-treatment recommendations with explanations, fully offline.','fig5');
-const pC=poster('Results','Variable-rate application compared with conventional uniform fertilizing on simulated plots.','fig4');
-textures.push(pA,pB,pC);
-plane(.42,.594,pA,-1.47,1.45,-.75,Math.PI/2,dasar); plane(.42,.594,pB,-1.47,1.45,-.1,Math.PI/2,dasar);
-plane(.42,.594,pC,1.47,1.45,.25,-Math.PI/2,dasar);
+// --- poster A2 ---
+function poster(title,body,img,cap){ const t=canvasTex(840,1188,(g,w,h)=>{g.fillStyle=PAPER;g.fillRect(0,0,w,h);
+  text(g,'Terra-Agri',50,80,34,GREEN,800); wrap(g,title,50,170,740,64,INK,800,1.05); let y=wrap(g,body,50,330,740,30,SUB);
+  fitImg(g,imgs[img],40,y+20,760,h-y-120); text(g,cap,50,h-60,26,SUB,500);}); textures.push(t); return t;}
+plane(.42,.594,poster('Farmers fertilize the whole field the same way.','Cloud IoT goes dark where signal is weak, and black-box AI is not trusted.','fig2','Nutrient heatmap, simulated plot'),-1.47,1.45,-.4,Math.PI/2);
+plane(.42,.594,poster('Results','Variable-rate application compared with uniform fertilizing on simulated plots.','fig5','Crop suitability score'),1.47,1.45,-.4,-Math.PI/2);
 
-// --- meja + 2. taplak ---
-const T={x:0,z:.55,w:1.2,d:.6,h:.75};
-box(T.w,.03,T.d,0xffffff,T.x,T.h,T.z); for(const sx of[-1,1])for(const sz of[-1,1]) box(.04,T.h,.04,0x999999,T.x+sx*.56,T.h/2,T.z+sz*.26);
-box(.45,.45,.45,0x444444,0,.45,-.1); box(.45,.5,.05,0x444444,0,.9,-.33); // kursi
-const clothTex=canvasTex(1024,512,(g,w,h)=>{g.fillStyle=GREEN;g.fillRect(0,0,w,h);text(g,'TERRA-AGRI',w/2,250,120,CREAM,900,'center');text(g,'Smart Farming Technology',w/2,340,44,'#cfe6c4',500,'center');});
-const clothM=mat(0x1f5130,{roughness:1}), frontM=new THREE.MeshStandardMaterial({map:clothTex,roughness:1});
-box(T.w+.04,.012,T.d+.04,clothM,T.x,T.h+.02,T.z,dasar);
-box(T.w+.04,T.h,.01,frontM,T.x,T.h/2+.01,T.z+T.d/2+.02,dasar);
-box(.01,T.h,T.d+.04,clothM,T.x-T.w/2-.02,T.h/2+.01,T.z,dasar); box(.01,T.h,T.d+.04,clothM,T.x+T.w/2+.02,T.h/2+.01,T.z,dasar);
+// --- meja + taplak polos ---
+const T={x:0,z:.2,w:1.2,d:.6,h:.75};
+box(T.w,.03,T.d,0xffffff,T.x,T.h,T.z);
+box(.45,.45,.45,0x444444,0,.45,-.55); box(.45,.5,.05,0x444444,0,.9,-.78);
+const clothM=mat(0x23472c,{roughness:1});
+box(T.w+.04,.012,T.d+.04,clothM,T.x,T.h+.02,T.z);
+box(T.w+.04,T.h,.01,clothM,T.x,T.h/2+.01,T.z+T.d/2+.02); box(T.w+.04,T.h,.01,clothM,T.x,T.h/2+.01,T.z-T.d/2-.02);
+box(.01,T.h,T.d+.04,clothM,T.x-T.w/2-.02,T.h/2+.01,T.z); box(.01,T.h,T.d+.04,clothM,T.x+T.w/2+.02,T.h/2+.01,T.z);
+const top=T.h+.03;
 
-// --- 1. monitor di stand ---
-const mon=new THREE.Group(); dasar.add(mon); mon.position.set(1.0,0,-.95); mon.rotation.y=-.6;
-box(.6,.04,.5,0x222222,0,.02,0,mon); box(.06,1.15,.06,0x222222,0,.6,0,mon); box(1.0,.6,.05,0x111111,0,1.45,0,mon);
-let slide=0; const slides=['fig2','fig3','fig4','fig5'];
-const screenTex=canvasTex(960,540,(g,w,h)=>{g.fillStyle='#0f1d14';g.fillRect(0,0,w,h);text(g,'TERRA-AGRI  demo video',24,48,32,'#cfe6c4',700);fitImg(g,imgs[slides[slide]],24,70,w-48,h-100);});
+// monitor 24" di meja
+const mon=new THREE.Group(); mon.position.set(-.05,top,T.z-.15); scene.add(mon);
+box(.24,.015,.18,0x1a1a1a,0,.008,0,mon); box(.04,.16,.03,0x1a1a1a,0,.09,-.03,mon); box(.55,.33,.03,0x111111,0,.33,0,mon);
+let slide=0; const slides=['fig3','fig2','fig4','fig5'];
+const screenTex=canvasTex(960,560,(g,w,h)=>{g.fillStyle='#fff';g.fillRect(0,0,w,h);fitImg(g,imgs[slides[slide]],16,16,w-32,h-32);});
 textures.push(screenTex);
-const scr=new THREE.Mesh(new THREE.PlaneGeometry(.94,.53),new THREE.MeshBasicMaterial({map:screenTex})); scr.position.set(0,1.45,.027); mon.add(scr);
+const scr=new THREE.Mesh(new THREE.PlaneGeometry(.52,.30),new THREE.MeshBasicMaterial({map:screenTex})); scr.position.set(0,.33,.016); mon.add(scr);
 setInterval(()=>{slide=(slide+1)%slides.length;screenTex.redraw();},2500);
 
-// --- 3. tanaman palsu ---
-function plant(x,z,s,parent){ const g=new THREE.Group(); g.position.set(x,0,z); g.scale.setScalar(s); parent.add(g);
-  cyl(.16,.12,.32,0xcfc6b4,0,.16,0,g);
-  const leafM=mat(0x4f8f37,{side:THREE.DoubleSide});
-  for(let i=0;i<22;i++){ const l=new THREE.Mesh(new THREE.SphereGeometry(.09,8,6),leafM); l.scale.set(.6,1.8,.25);
-    const a=i*2.4, r=.05+(i%5)*.05, y=.45+(i/22)*.85; l.position.set(Math.cos(a)*r,y,Math.sin(a)*r); l.rotation.set(Math.sin(a)*.6,a,Math.cos(a)*.6); l.castShadow=true; g.add(l);} return g;}
-plant(-1.2,-1.2,.75,dasar); plant(1.2,1.2,.7,dasar); plant(.5,.68,.22,dasar).position.y=T.h+.02;
-
-// --- 5. poster B5 di stand akrilik ---
-const b5=canvasTex(352,500,(g,w,h)=>{g.fillStyle=CREAM;g.fillRect(0,0,w,h);g.fillStyle=GREEN;g.fillRect(0,0,w,110);text(g,'AGRI WAND',20,70,40,CREAM,900);
-  wrap(g,'Soil nutrients + GPS, logged offline, synced to Terra Core.',20,160,310,24,'#2b2b2b');g.fillStyle='#222';g.fillRect(96,300,160,160);g.fillStyle='#fff';g.fillRect(116,320,120,120);text(g,'QR',w/2,395,36,'#222',800,'center');});
-for(const x of[-.48,-.24]){ const p=plane(.176,.25,b5,x,T.h+.15,T.z+.12,0,dasar); p.rotation.x=-.2; box(.18,.01,.06,new THREE.MeshStandardMaterial({color:0xffffff,transparent:true,opacity:.4}),x,T.h+.03,T.z+.14,dasar);}
-
-// --- 7. bendera ---
-function deskFlag(x,draw){const g=new THREE.Group(); g.position.set(x,T.h+.02,T.z-.2); dasar.add(g); cyl(.004,.004,.32,0xc0c0c0,0,.16,0,g); cyl(.03,.03,.01,0x333333,0,.005,0,g);
-  plane(.15,.1,canvasTex(150,100,draw),.077,.26,0,0,g).material.side=THREE.DoubleSide;}
-deskFlag(-.1,(g,w,h)=>{g.fillStyle='#ce1126';g.fillRect(0,0,w,h/2);g.fillStyle='#fff';g.fillRect(0,h/2,w,h/2);});
-deskFlag(.15,(g,w,h)=>{g.fillStyle='#fff';g.fillRect(0,0,w,h);g.fillStyle='#bc002d';g.beginPath();g.arc(w/2,h/2,h*.3,0,7);g.fill();});
-// === REKOMENDASI ===
 // nampan tanah + Agri Wand
-box(.42,.06,.3,0x6d4c2e,.25,T.h+.06,T.z+.05,plus); box(.38,.02,.26,mat(0x4a321d,{roughness:1}),.25,T.h+.09,T.z+.05,plus);
-const wand=new THREE.Group(); wand.position.set(.3,T.h+.1,T.z+.05); wand.rotation.z=-.15; plus.add(wand);
-cyl(.012,.012,.22,0xaaaaaa,0,.05,0,wand); cyl(.035,.03,.18,0x2a2a2a,0,.25,0,wand); box(.09,.09,.02,0x5fc2e0,0,.37,.0,wand);
-// ivy di tepi atas dinding
+box(.36,.05,.26,0x6d4c2e,.38,top+.025,T.z+.08); box(.32,.02,.22,mat(0x4a321d,{roughness:1}),.38,top+.05,T.z+.08);
+const wand=new THREE.Group(); wand.position.set(.42,top+.05,T.z+.08); wand.rotation.z=-.15; scene.add(wand);
+cyl(.012,.012,.22,0xaaaaaa,0,.05,0,wand); cyl(.035,.03,.18,0x2a2a2a,0,.25,0,wand); box(.09,.09,.02,0x5fc2e0,0,.37,0,wand);
+
+// B5 + bendera meja
+const b5=canvasTex(352,500,(g,w,h)=>{g.fillStyle=PAPER;g.fillRect(0,0,w,h);text(g,'Agri Wand',24,70,40,GREEN,800);
+  wrap(g,'Soil nutrients and GPS, logged offline, synced to Terra Core.',24,130,300,24,INK);g.fillStyle='#222';g.fillRect(96,300,160,160);g.fillStyle='#fff';g.fillRect(116,320,120,120);text(g,'[QR]',w/2,392,30,'#222',800,'center');});
+const bp=plane(.176,.25,b5,-.45,top+.13,T.z+.1,.2); bp.rotation.x=-.2;
+function deskFlag(x,draw){const g=new THREE.Group(); g.position.set(x,top,T.z+.2); scene.add(g); cyl(.004,.004,.32,0xc0c0c0,0,.16,0,g); cyl(.03,.03,.01,0x333333,0,.005,0,g);
+  plane(.15,.1,canvasTex(150,100,draw),.077,.26,0,0,g).material.side=THREE.DoubleSide;}
+deskFlag(-.25,(g,w,h)=>{g.fillStyle='#ce1126';g.fillRect(0,0,w,h/2);g.fillStyle='#fff';g.fillRect(0,h/2,w,h/2);});
+deskFlag(-.08,(g,w,h)=>{g.fillStyle='#fff';g.fillRect(0,0,w,h);g.fillStyle='#bc002d';g.beginPath();g.arc(w/2,h/2,h*.3,0,7);g.fill();});
+
+// --- tanaman ---
+const leafMs=[mat(0x4f8f37,{side:THREE.DoubleSide}),mat(0x3d7a32,{side:THREE.DoubleSide}),mat(0x6aa548,{side:THREE.DoubleSide})];
+function plant(x,z,s,{pot=0x3a3a3a,n=22,spread=1}={}){ const g=new THREE.Group(); g.position.set(x,0,z); g.scale.setScalar(s); scene.add(g);
+  cyl(.16,.12,.3,pot,0,.15,0,g);
+  for(let i=0;i<n;i++){ const l=new THREE.Mesh(new THREE.SphereGeometry(.09,8,6),leafMs[i%3]); l.scale.set(.7,1.6,.25);
+    const a=i*2.4, r=(.05+(i%5)*.05)*spread, y=.38+(i/n)*.7; l.position.set(Math.cos(a)*r,y,Math.sin(a)*r); l.rotation.set(Math.sin(a)*.7,a,Math.cos(a)*.7); l.castShadow=true; g.add(l);} return g;}
+for(let i=0;i<5;i++) plant(-.5+i*.25,.72,.42,{pot:0xb5653a,n:16});        // pot kecil berjajar di depan meja
+plant(-1.2,1.2,.85,{n:34,spread:1.6}); plant(1.25,1.3,.75,{n:30,spread:1.5}); // rumpun sudut depan
+plant(-1.2,-1.15,.75,{n:28,spread:1.3}); plant(1.2,-1.15,.75,{n:28,spread:1.3});
+
+// --- jaring hijau + daun rambat, sudut depan kiri ---
+const netTex=canvasTex(128,128,(g,w,h)=>{g.fillStyle='rgba(60,130,70,.55)';g.fillRect(0,0,w,h);g.strokeStyle='#1f5a26';g.lineWidth=2;for(let i=0;i<=w;i+=16){g.beginPath();g.moveTo(i,0);g.lineTo(i,h);g.stroke();g.beginPath();g.moveTo(0,i);g.lineTo(w,i);g.stroke();}});
+netTex.wrapS=netTex.wrapT=THREE.RepeatWrapping; netTex.repeat.set(20,52);
+const netGeo=new THREE.PlaneGeometry(.8,2.08,30,10); const np=netGeo.attributes.position;
+for(let i=0;i<np.count;i++){const x=np.getX(i),y=np.getY(i),t=(1.04-y)/2.08; const k=Math.min(1,t*1.8); np.setX(i,x*(1-.75*k)-.28*k); np.setZ(i,Math.sin(x*30)*.03*(1-k*.5));} netGeo.computeVertexNormals();
+const net=new THREE.Mesh(netGeo,new THREE.MeshStandardMaterial({map:netTex,color:0x4f9a55,transparent:true,opacity:.55,depthWrite:false,side:THREE.DoubleSide,emissive:0x1f4a24,emissiveIntensity:.25}));
+net.position.set(-1.05,1.04,1.42); scene.add(net);
 const ivyM=mat(0x3f7d2c);
-function ivy(x0,z0,x1,z1){const n=40;for(let i=0;i<n;i++){const t=i/n,x=x0+(x1-x0)*t,z=z0+(z1-z0)*t;const l=new THREE.Mesh(new THREE.SphereGeometry(.035,6,5),ivyM);l.scale.set(1,.6,.5);l.position.set(x,2.08-Math.abs(Math.sin(i*1.7))*.12,z);plus.add(l);}}
-ivy(-1.45,-1.44,1.45,-1.44); ivy(-1.44,-1.45,-1.44,1.45); ivy(1.44,-1.45,1.44,1.45);
+function strand(x,z,len){for(let i=0;i<len*14;i++){const l=new THREE.Mesh(new THREE.SphereGeometry(.03,6,5),ivyM);l.scale.set(1,.6,.5);l.position.set(x+Math.sin(i)*.03,2.08-i/14,z+Math.cos(i*1.3)*.03);scene.add(l);}}
+strand(-1.4,1.42,1.6); strand(-1.1,1.42,1.1); strand(-.75,1.42,.7); strand(-1.44,1.1,1.3);
+for(let i=0;i<34;i++){const l=new THREE.Mesh(new THREE.SphereGeometry(.03,6,5),ivyM);l.position.set(-1.45+i*.03,2.08-Math.abs(Math.sin(i*.6))*.05,1.42);scene.add(l);}
+
+// --- papan kapur + easel, depan kanan ---
+const easel=new THREE.Group(); easel.position.set(.95,0,.95); easel.rotation.y=-.35; scene.add(easel);
+const woodM=mat(0xc79a62);
+for(const sx of[-1,1]){const leg=box(.03,1.3,.03,woodM,sx*.2,.62,0,easel); leg.rotation.z=sx*.08;}
+const backLeg=box(.03,1.25,.03,woodM,0,.6,-.22,easel); backLeg.rotation.x=-.35;
+box(.5,.03,.05,woodM,0,.5,.02,easel);
+const chalk=canvasTex(500,640,(g,w,h)=>{g.fillStyle='#c79a62';g.fillRect(0,0,w,h);g.fillStyle='#23292a';g.fillRect(24,24,w-48,h-48);
+  ['COBA DEMO','SENSOR','KAMI!'].forEach((s,i)=>text(g,s,w/2,170+i*90,72,'#f2f2ea',700,'center'));
+  ['(Try our','sensor demo!)'].forEach((s,i)=>text(g,s,w/2,470+i*60,46,'#e0e0d6',500,'center'));});
+plane(.5,.64,chalk,0,.85,.03,0,easel);
+
+// --- lampu sorot di rangka depan ---
+for(const x of[-.8,.8]){box(.07,.1,.07,0x222222,x,2.05,1.42); const sp=new THREE.SpotLight(0xfff1d6,5,4.5,.55,.6); sp.position.set(x,2.0,1.4); sp.target.position.set(x*.4,1.1,-1.5); scene.add(sp,sp.target);}
+
 // --- sudut pandang ---
 const VIEWS=[
   ['Pengunjung',[0,1.6,4.3],[0,1.05,-.4]],
@@ -209,7 +224,7 @@ const VIEWS=[
   ['Lorong kiri',[-2.6,1.9,4.2],[0,1,-.3]],
   ['Denah atas',[0,7.5,.01],[0,0,0]],
   ['Penjaga booth',[0,1.45,-1.2],[0,1,3]],
-  ['Meja demo',[.6,1.35,1.75],[0,.8,.45]],
+  ['Meja demo',[.45,1.5,1.95],[0,.9,.1]],
 ];
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const viewsEl=document.querySelector('.views'); let anim=null;
@@ -218,9 +233,8 @@ VIEWS.forEach(([name,p,t],i)=>{const b=document.createElement('button');b.textCo
 function go(p,t,instant=reduce){const to={p:new THREE.Vector3(...p),t:new THREE.Vector3(...t)};
   if(instant){camera.position.copy(to.p);controls.target.copy(to.t);anim=null;return;}
   anim={from:{p:camera.position.clone(),t:controls.target.clone()},to,k:0};}
-go(VIEWS[0][1],VIEWS[0][2],true);
-
-const qs=new URLSearchParams(location.search); if(qs.get('v')) { const v=VIEWS[+qs.get('v')]; if(v){ go(v[1],v[2],true); viewsEl.querySelectorAll('button').forEach((x,i)=>x.setAttribute('aria-pressed',i===+qs.get('v'))); } }
+const vi=+(new URLSearchParams(location.search).get('v')||0), v0=VIEWS[vi]||VIEWS[0];
+go(v0[1],v0[2],true); viewsEl.querySelectorAll('button').forEach((x,i)=>x.setAttribute('aria-pressed',i===vi));
 
 function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}
 new ResizeObserver(resize).observe(stage);
