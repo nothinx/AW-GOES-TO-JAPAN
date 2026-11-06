@@ -50,7 +50,7 @@ li span{color:var(--muted);font-size:14px}
       <li><b>Jaring hijau + daun rambat</b><span>Sudut depan kiri, dijepit di rangka atas dan dibiarkan menjuntai. Jaring paranet/kain jaring dan ivy plastik, keduanya ringan dan bisa dilipat.</span></li>
       <li><b>Tanaman palsu dalam pot plastik</b><span>4 sampai 5 pot kecil berjajar di depan meja + 2 rumpun di sudut depan. Pot plastik, bukan tanah liat, supaya ringan.</span></li>
       <li><b>2 poster A2</b><span>Dinding kiri: masalah dan solusi. Dinding kanan: hasil. Gaya sama dengan MMT. Template INNOPA ada di backup HP: <code>Download/Poster Product.pdf</code>.</span></li>
-      <li><b>Poster B5 di stand akrilik + bendera meja ID/JP</b><span>Di sisi kiri meja.</span></li>
+      <li><b>Poster B5 di stand akrilik + bendera meja Indonesia</b><span>Di sisi kiri meja.</span></li>
     </ol>
     <h2>Bawaan pendukung</h2>
     <p>Klip binder, cable ties, double tape, gunting, terminal kabel, kapur. Cek dulu aturan panitia soal menempel di panel booth.</p>
@@ -179,7 +179,6 @@ const bp=plane(.176,.25,b5,-.45,top+.13,T.z+.1,.2); bp.rotation.x=-.2;
 function deskFlag(x,draw){const g=new THREE.Group(); g.position.set(x,top,T.z+.2); scene.add(g); cyl(.004,.004,.32,0xc0c0c0,0,.16,0,g); cyl(.03,.03,.01,0x333333,0,.005,0,g);
   plane(.15,.1,canvasTex(150,100,draw),.077,.26,0,0,g).material.side=THREE.DoubleSide;}
 deskFlag(-.25,(g,w,h)=>{g.fillStyle='#ce1126';g.fillRect(0,0,w,h/2);g.fillStyle='#fff';g.fillRect(0,h/2,w,h/2);});
-deskFlag(-.08,(g,w,h)=>{g.fillStyle='#fff';g.fillRect(0,0,w,h);g.fillStyle='#bc002d';g.beginPath();g.arc(w/2,h/2,h*.3,0,7);g.fill();});
 
 // --- tanaman ---
 const leafMs=[mat(0x4f8f37,{side:THREE.DoubleSide}),mat(0x3d7a32,{side:THREE.DoubleSide}),mat(0x6aa548,{side:THREE.DoubleSide})];
